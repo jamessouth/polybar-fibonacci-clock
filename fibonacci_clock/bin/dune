@@ -1,0 +1,4 @@
+(executable
+ (public_name fibonacci_clock)
+ (name main)
+ (libraries fibonacci_clock))
