@@ -1,2 +1,3 @@
 (test
- (name fibonacci_clock))
+ (name fibonacci_clock)
+ (libraries fibonacci_clock))
