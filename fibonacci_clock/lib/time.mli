@@ -21,3 +21,4 @@
     val hour : int
     val min : int
     val sec : int
+    val base : string list

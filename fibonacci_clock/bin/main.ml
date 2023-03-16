@@ -1,4 +1,4 @@
 
 
 
-  let () = print_endline Fibonacci_clock.Time.greeting
+  let () = print_endline (String.concat "" Fibonacci_clock.Time.base)
