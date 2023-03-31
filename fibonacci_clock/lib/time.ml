@@ -19,3 +19,8 @@ let base =
     "%{F#ffffff}█████";
     "%{F#ffffff}████████";
   ]
+
+  
+let pbase str gap = let g = "%{O" ^ (string_of_int gap) ^ "}" in print_endline (String.concat g str)
+
+let pp = pbase base 

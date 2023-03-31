@@ -22,3 +22,4 @@
     val min : int
     val sec : int
     val base : string list
+    val pp : int -> unit
