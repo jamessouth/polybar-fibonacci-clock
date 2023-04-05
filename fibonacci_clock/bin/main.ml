@@ -18,24 +18,45 @@ open Core
 
 
 
-let get_layout l = match l with
-| "Fib_20"
-| "A331072_60"
-| "Fib_tri_15"
-| "Fib_tri_30" -> l
-| _ -> failwith "Not a valid layout option"
+let get_seq l = match l with
+| "Fibonacci_numbers"
+| "A331072"
+| "Fibonacci_triangle"
+| "A034298"
+| "Semi_Fibonacci"
+| "Divisors_of_928"
+| "Pascals_triangle"
+| "Padovan_numbers"
+| "Narayanas_cows"
+| "Tetranacci_numbers_78"
+| "Tetranacci_numbers_288"
+| "Tribonacci_numbers"
+| "Partition_numbers" -> l
+| _ -> failwith l ^ " is not a valid seq option"
 
-let minutes =
-  Command.Arg_type.create get_layout
+let seq =
+  Command.Arg_type.create get_seq
 
 let command =
   Command.basic
     ~summary:"fib clock"
     ~readme:(fun () -> "More detailed information")
-    (let%map_open.Command layout =
-       anon ("layout" %: minutes)
+
+
+    (let%map_open.Command minutes_seq =
+       flag "-ms" (optional seq)
+       ~doc:"sequence for minutes clock"
+        and 
+
      in
-     fun () -> print_string layout)
+     fun () -> match minutes_seq with
+     | Some ms -> print_endline ms
+     | None -> ())
+
+    (* (let%map_open.Command minutes_seq =
+       anon (maybe ("minutes_seq" %: seq))
+     in
+     fun () -> print_string minutes_seq) *)
 
 let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
 
