@@ -9,6 +9,10 @@ let hour = getHour time.tm_hour
 let min = time.tm_min
 let sec = time.tm_sec
 
+let u2591 = "░"
+let u2592 = "▒"
+let u2593 = "▓"
+let u2588 = "█"
 
 let base =
   [
