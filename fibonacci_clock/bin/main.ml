@@ -9,13 +9,19 @@ let sequences =
     ("Semi_Fibonacci", [ "15" ]);
     ("Divisors_of_928", [ "15"; "30"; "60" ]);
     ("Pascals_triangle", [ "15"; "20"; "30" ]);
-    ("Padovan_numbers", [ "15"; "20"; "30"; "60" ]);
+    ("Padovan_numbers_sm", [ "15"; "20" ]);
+    ("Padovan_numbers_lg", [ "30"; "60" ]);
     ("Narayanas_cows", [ "60" ]);
-    ("Tetranacci_numbers_78", [ "15"; "20"; "30"; "60" ]);
-    ("Tetranacci_numbers_288", [ "15" ]);
+    ("Tetranacci_numbers", [ "15" ]);
     ("Tribonacci_numbers", [ "15" ]);
     ("Partition_numbers", [ "20"; "30" ]);
   ]
+
+  let seq_to_ind = function
+  |"15" -> 1
+  |"20" -> 2
+  |"30" -> 3
+  |_ -> 4
 
 let layout =
   Command.Arg_type.create (fun opt_list ->
