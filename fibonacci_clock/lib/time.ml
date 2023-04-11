@@ -22,22 +22,30 @@ let rec flatten_pairs = function
   | [] -> []
   | h :: t -> (fst h ^ snd h) :: flatten_pairs t
 
-let sequences =
+let mono =
   [
-    ("Fibonacci_numbers", [ []; [ 1; 1; 2; 3; 5; 8 ] ]);
-    ("A331072", [ []; []; []; [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ] ]);
-    ("Fibonacci_triangle", [ [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]; []; [ 3; 5; 3; 4 ] ]);
-    ("A034298", [ []; []; [ 1; 2; 3; 4; 6; 6; 8 ] ]);
-    ("Semi_Fibonacci", [ [ 1; 1; 2; 1; 3; 2; 5 ] ]);
-    ("Divisors_of_928", [ [ 1; 2; 4; 8 ]; []; [ 16 ]; [ 29 ] ]);
+    (* 15 *)
+    ("Semi_Fibonacci", [ 1; 1; 2; 1; 3; 2; 5 ]);
+    ("Tetranacci_numbers", [ 1; 1; 1; 1; 4; 7 ]);
+    ("Tribonacci_numbers", [ 1; 1; 2; 4; 7 ]);
+    (* 20 *)
+    ("Fibonacci_numbers", [ 1; 1; 2; 3; 5; 8 ]);
+    (* 30 *)
+    ("A034298", [ 1; 2; 3; 4; 6; 6; 8 ]);
+    ("Partition_numbers", [ 1; 1; 2; 3; 5; 7; 11 ]);
+    (* 60 *)
+    ("Narayanas_cows", [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]);
+    ("A331072", [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]);
+  ]
+
+let poly =
+  [
+    ("Padovan_numbers_sm", [ [ 1; 1; 1; 1; 2; 2; 3; 4 ]; [ 5 ] ]);
     ( "Pascals_triangle",
       [ [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]; [ 1; 4 ]; [ 6; 4 ] ] );
-    ("Padovan_numbers_sm", [ [ 1; 1; 1; 1; 2; 2; 3; 4 ]; [ 5 ] ]);
+    ("Fibonacci_triangle", [ [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]; []; [ 3; 5; 3; 4 ] ]);
+    ("Divisors_of_928", [ [ 1; 2; 4; 8 ]; []; [ 16 ]; [ 29 ] ]);
     ("Padovan_numbers_lg", [ []; []; [ 1; 2; 2; 3; 4; 5; 7; 9 ]; [ 12; 16 ] ]);
-    ("Narayanas_cows", [ []; []; []; [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ] ]);
-    ("Tetranacci_numbers", [ [ 1; 1; 1; 1; 4; 7 ] ]);
-    ("Tribonacci_numbers", [ [ 1; 1; 2; 4; 7 ] ]);
-    ("Partition_numbers", [ []; [ 1; 1; 2; 3; 5; 7 ]; [ 11 ] ]);
   ]
 
 let rec repeat s n =

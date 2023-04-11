@@ -1,40 +1,47 @@
 open Core
 
-let sequences =
+let mono =
   [
-    ("Fibonacci_numbers", [ "20" ]);
-    ("A331072", [ "60" ]);
-    ("Fibonacci_triangle", [ "15"; "30" ]);
-    ("A034298", [ "30" ]);
-    ("Semi_Fibonacci", [ "15" ]);
-    ("Divisors_of_928", [ "15"; "30"; "60" ]);
-    ("Pascals_triangle", [ "15"; "20"; "30" ]);
-    ("Padovan_numbers_sm", [ "15"; "20" ]);
-    ("Padovan_numbers_lg", [ "30"; "60" ]);
-    ("Narayanas_cows", [ "60" ]);
-    ("Tetranacci_numbers", [ "15" ]);
-    ("Tribonacci_numbers", [ "15" ]);
-    ("Partition_numbers", [ "20"; "30" ]);
+    "Semi_Fibonacci";
+    "Tetranacci_numbers";
+    "Tribonacci_numbers";
+    "Fibonacci_numbers";
+    "A034298";
+    "Partition_numbers";
+    "Narayanas_cows";
+    "A331072";
   ]
 
-  let seq_to_ind = function
-  |"15" -> 1
-  |"20" -> 2
-  |"30" -> 3
-  |_ -> 4
+let poly =
+  [
+    ("Padovan_numbers_sm", [ "15"; "20" ]);
+    ("Pascals_triangle", [ "15"; "20"; "30" ]);
+    ("Fibonacci_triangle", [ "15"; "30" ]);
+    ("Divisors_of_928", [ "15"; "30"; "60" ]);
+    ("Padovan_numbers_lg", [ "30"; "60" ]);
+  ]
+
+let seq_to_ind = function "15" -> 1 | "20" -> 2 | "30" -> 3 | _ -> 4
 
 let layout =
   Command.Arg_type.create (fun opt_list ->
+      let err = "gap must be a positive integer or zero" in
       match String.split opt_list ~on:' ' with
       | [ s; a; g ] ->
-          let err = "gap must be a positive integer or zero" in
           if
             not
-              (List.exists sequences ~f:(fun x ->
+              (List.exists poly ~f:(fun x ->
                    if String.( = ) (fst x) s then
                      List.exists (snd x) ~f:(fun y -> String.( = ) y a)
                    else false))
           then failwith (s ^ " " ^ a ^ " is not a valid sequence option")
+          else if
+            not (try int_of_string g > -1 with Failure _ -> failwith err)
+          then failwith err
+          else opt_list
+      | [ s; g ] ->
+          if not (List.exists mono ~f:(fun x -> String.( = ) x s)) then
+            failwith (s ^ " is not a valid sequence option")
           else if
             not (try int_of_string g > -1 with Failure _ -> failwith err)
           then failwith err
