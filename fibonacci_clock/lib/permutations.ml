@@ -41,21 +41,29 @@ let rec sum = function [] -> 0 | h :: t -> h.value + sum t
 let comp a b =
   if a.index < b.index then -1 else if a.index > b.index then 1 else 0
 
-let get_rando_seq n l =
-  let ddd = List.mapi (fun index value -> { index; value; color = 0 }) l in
+let ddd l = List.mapi (fun index value -> { index; value; color = 0 }) l
+
+let get_rando_seq n t l =
   let rec inner n res ll =
     match ll with
     | [] -> failwith "n cannot be reached with these numbers"
     | _ ->
         let r = Random.int (List.length ll) in
-        let res = { (List.nth ll r) with color = 1 } :: res in
+        let randterm = List.nth ll r in
+        let res =
+          {
+            randterm with
+            color = (if t = "h" then randterm.color + 1 else randterm.color + 2);
+          }
+          :: res
+        in
         let y = sum res in
-        let nnn = List.filteri (fun i _x -> i != r) ll in
+        let nnn = List.filteri (fun i _x -> i <> r) ll in
         if y = n then List.sort comp (res @ nnn)
-        else if y > n then inner n [] ddd
+        else if y > n then inner n [] l
         else inner n res nnn
   in
-  inner n [] ddd
+  inner n [] l
 
 (* let rec help = function [] -> [] | h :: t -> (0, h) :: help t *)
 
