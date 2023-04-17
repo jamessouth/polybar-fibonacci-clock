@@ -13,7 +13,7 @@ let sec = time.tm_sec
    let u2593 = "▓"
    let u2588 = "█" *)
 
-let blocks = [ "█"; "▓"; "▒"; "░" ]
+let blocks = [ "░"; "▒"; "▓"; "█" ]
 
 let rec take n l =
   if n = 0 then [] else match l with [] -> [] | h :: t -> h :: take (n - 1) t
