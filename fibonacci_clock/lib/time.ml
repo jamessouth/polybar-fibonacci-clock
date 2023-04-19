@@ -1,55 +1,56 @@
-let time = Unix.localtime (Unix.time ())
+let get_hour hr =
+  match (hr < 13, hr = 0) with
+  | true, true -> 12
+  | true, false -> hr
+  | _ -> hr - 12
 
-let getHour h =
-  match h < 13 with
-  | true -> ( match h with 0 -> 12 | _ -> h)
-  | false -> h - 12
+let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
+  Unix.localtime (Unix.time ())
 
-let hour = getHour time.tm_hour
-let min = time.tm_min
-let sec = time.tm_sec
 (* let u2591 = "░"
    let u2592 = "▒"
    let u2593 = "▓"
    let u2588 = "█" *)
 
-let blocks = [ "░"; "▒"; "▓"; "█" ]
+(* let blocks = [ "░"; "▒"; "▓"; "█" ] *)
 
-let rec take n l =
-  if n = 0 then [] else match l with [] -> [] | h :: t -> h :: take (n - 1) t
+(* let rec take n l =
+   if n = 0 then []
+   else match l with [] -> [] | hd :: tl -> hd :: take (n - 1) tl *)
 
-let rec flatten_pairs = function
-  | [] -> []
-  | h :: t -> (fst h ^ snd h) :: flatten_pairs t
+(* let rec flatten_pairs = function
+   | [] -> []
+   | (a, b) :: tl -> (a ^ b) :: flatten_pairs tl *)
 
-let mono =
-  [
-    (* 15 *)
-    ("Semi_Fibonacci", [ 1; 1; 2; 1; 3; 2; 5 ]);
-    ("Tetranacci_numbers", [ 1; 1; 1; 1; 4; 7 ]);
-    ("Tribonacci_numbers", [ 1; 1; 2; 4; 7 ]);
-    (* 20 *)
-    ("Fibonacci_numbers", [ 1; 1; 2; 3; 5; 8 ]);
-    (* 30 *)
-    ("A034298", [ 1; 2; 3; 4; 6; 6; 8 ]);
-    ("Partition_numbers", [ 1; 1; 2; 3; 5; 7; 11 ]);
-    (* 60 *)
-    ("Narayanas_cows", [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]);
-    ("A331072", [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]);
-  ]
+(* let mono =
+     [
+       (* 15 *)
+       ("Semi_Fibonacci", [ 1; 1; 2; 1; 3; 2; 5 ]);
+       ("Tetranacci_numbers", [ 1; 1; 1; 1; 4; 7 ]);
+       ("Tribonacci_numbers", [ 1; 1; 2; 4; 7 ]);
+       (* 20 *)
+       ("Fibonacci_numbers", [ 1; 1; 2; 3; 5; 8 ]);
+       (* 30 *)
+       ("A034298", [ 1; 2; 3; 4; 6; 6; 8 ]);
+       ("Partition_numbers", [ 1; 1; 2; 3; 5; 7; 11 ]);
+       (* 60 *)
+       ("Narayanas_cows", [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]);
+       ("A331072", [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]);
+     ]
 
-let poly =
-  [
-    ("Padovan_numbers_sm", [ [ 1; 1; 1; 1; 2; 2; 3; 4 ]; [ 5 ] ]);
-    ( "Pascals_triangle",
-      [ [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]; [ 1; 4 ]; [ 6; 4 ] ] );
-    ("Fibonacci_triangle", [ [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]; []; [ 3; 5; 3; 4 ] ]);
-    ("Divisors_of_928", [ [ 1; 2; 4; 8 ]; []; [ 16 ]; [ 29 ] ]);
-    ("Padovan_numbers_lg", [ []; []; [ 1; 2; 2; 3; 4; 5; 7; 9 ]; [ 12; 16 ] ]);
-  ]
+   let poly =
+     [
+       ("Padovan_numbers_sm", [ [ 1; 1; 1; 1; 2; 2; 3; 4 ]; [ 5 ] ]);
+       ( "Pascals_triangle",
+         [ [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]; [ 1; 4 ]; [ 6; 4 ] ] );
+       ("Fibonacci_triangle", [ [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]; []; [ 3; 5; 3; 4 ] ]);
+       ("Divisors_of_928", [ [ 1; 2; 4; 8 ]; []; [ 16 ]; [ 29 ] ]);
+       ("Padovan_numbers_lg", [ []; []; [ 1; 2; 2; 3; 4; 5; 7; 9 ]; [ 12; 16 ] ]);
+     ] *)
 
-let rec repeat s n =
-  if n > -1 then match n with 0 -> "" | _ -> s ^ repeat s (n - 1) else ""
+(* let rec repeat_str str n =
+   if n > -1 then match n with 0 -> "" | _ -> str ^ repeat_str str (n - 1)
+   else "" *)
 
 let base =
   [

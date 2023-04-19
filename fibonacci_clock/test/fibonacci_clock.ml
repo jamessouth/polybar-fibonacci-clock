@@ -1,62 +1,9 @@
 let () =
   assert (
     Bool.equal
-      (let inp =
-         [
-           0;
-           1;
-           2;
-           3;
-           4;
-           5;
-           6;
-           7;
-           8;
-           9;
-           10;
-           11;
-           12;
-           13;
-           14;
-           15;
-           16;
-           17;
-           18;
-           19;
-           20;
-           21;
-           22;
-           23;
-         ]
+      (let res =
+         List.map Fibonacci_clock.Time.get_hour (List.init 24 (fun y -> y))
        in
-       let outp =
-         [
-           12;
-           1;
-           2;
-           3;
-           4;
-           5;
-           6;
-           7;
-           8;
-           9;
-           10;
-           11;
-           12;
-           1;
-           2;
-           3;
-           4;
-           5;
-           6;
-           7;
-           8;
-           9;
-           10;
-           11;
-         ]
-       in
-       let res = List.map Fibonacci_clock.Time.getHour inp in
-       List.equal Int.equal res outp)
+       List.equal Int.equal res
+         ((12 :: List.init 12 (fun y -> y + 1)) @ List.init 11 (fun y -> y + 1)))
       true)

@@ -19,40 +19,38 @@ let pl f lst =
   print_newline ()
 
 let pint = pl print_int
+let rec sum = function [] -> 0 | hd :: tl -> hd.value + sum tl
 
-(* let pl2 f lst =
-     let rec print_elements = function
-       | [] -> ()
-       | h :: t ->
-           f h;
-           print_string ";";
-           print_elements t
-     in
-     print_string "[";
-     print_elements lst;
-     print_string "]";
-     print_newline ()
+let get_term_list l =
+  List.mapi (fun index value -> { index; value; color = 0 }) l
 
-   let pint2 = pl2 print_int *)
-
-let rec sum = function [] -> 0 | h :: t -> h.value + sum t
-let ddd l = List.mapi (fun index value -> { index; value; color = 0 }) l
-
-let get_rando_seq n t l =
-  let rec inner n res ll =
+let get_rando_seq target period l =
+  let rec inner target result ll =
     match ll with
-    | [] -> failwith "n cannot be reached with these numbers"
+    | [] -> failwith "target cannot be reached with these numbers"
     | _ ->
-        let r = Random.int (List.length ll) in
-        let randterm = List.nth ll r in
-        let res =
-          { randterm with color = (randterm.color + if t = "h" then 1 else 2) }
-          :: res
+        let random_index = Random.int (List.length ll) in
+        let random_term = List.nth ll random_index in
+        let result =
+          {
+            random_term with
+            color =
+              (random_term.color
+              +
+              match period with
+              | "hour" -> 1
+              | "minute" -> 2
+              | _ -> failwith "period must be \"hour\" or \"minute\"");
+          }
+          :: result
         in
-        let y = sum res in
-        let nnn = List.filteri (fun i _x -> i <> r) ll in
-        if y = n then List.sort (fun a b -> compare a.index b.index) (res @ nnn)
-        else if y > n then inner n [] l
-        else inner n res nnn
+        let result_sum = sum result in
+        let remaining_terms = List.filteri (fun i _x -> i <> random_index) ll in
+        if result_sum = target then
+          List.sort
+            (fun a b -> compare a.index b.index)
+            (result @ remaining_terms)
+        else if result_sum > target then inner target [] l
+        else inner target result remaining_terms
   in
-  inner n [] l
+  inner target [] l

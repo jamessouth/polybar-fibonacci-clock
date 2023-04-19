@@ -21,7 +21,7 @@ let poly =
     ("Padovan_numbers_lg", [ "30"; "60" ]);
   ]
 
-let seq_to_ind = function "15" -> 1 | "20" -> 2 | "30" -> 3 | _ -> 4
+(* let seq_to_ind = function "15" -> 1 | "20" -> 2 | "30" -> 3 | _ -> 4 *)
 
 let layout =
   Command.Arg_type.create (fun opt_list ->

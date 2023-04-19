@@ -16,8 +16,7 @@
     {4 Examples}
 
     {[ print_endline greeting ]} *)
-    val time : Unix.tm
-    val getHour : int -> int
+    val get_hour : int -> int
     val hour : int
     val min : int
     val sec : int
