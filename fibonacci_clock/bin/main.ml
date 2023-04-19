@@ -25,27 +25,29 @@ let poly =
 
 let layout =
   Command.Arg_type.create (fun opt_list ->
-      let err = "gap must be a positive integer or zero" in
+      let validity_error = " is not a valid sequence option" in
+      let gap_error = "gap must be a positive integer or zero" in
+      let test_input bool1 err1 gap =
+        if not bool1 then failwith err1
+        else if
+          not
+            (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
+        then failwith gap_error
+        else opt_list
+      in
       match String.split opt_list ~on:' ' with
       | [ s; a; g ] ->
-          if
-            not
-              (List.exists poly ~f:(fun x ->
-                   if String.( = ) (fst x) s then
-                     List.exists (snd x) ~f:(fun y -> String.( = ) y a)
-                   else false))
-          then failwith (s ^ " " ^ a ^ " is not a valid sequence option")
-          else if
-            not (try int_of_string g > -1 with Failure _ -> failwith err)
-          then failwith err
-          else opt_list
+          test_input
+            (List.exists poly ~f:(fun x ->
+                 if String.( = ) (fst x) s then
+                   List.exists (snd x) ~f:(fun y -> String.( = ) y a)
+                 else false))
+            (s ^ " " ^ a ^ validity_error)
+            g
       | [ s; g ] ->
-          if not (List.exists mono ~f:(fun x -> String.( = ) x s)) then
-            failwith (s ^ " is not a valid sequence option")
-          else if
-            not (try int_of_string g > -1 with Failure _ -> failwith err)
-          then failwith err
-          else opt_list
+          test_input
+            (List.exists mono ~f:(fun x -> String.( = ) x s))
+            (s ^ validity_error) g
       | [ _ ] | _ -> failwith "improper input")
 
 let command =
