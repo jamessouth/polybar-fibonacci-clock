@@ -25,10 +25,10 @@ let poly =
 
 let layout =
   Command.Arg_type.create (fun opt_list ->
-      let validity_error = " is not a valid sequence option" in
-      let gap_error = "gap must be a positive integer or zero" in
-      let test_input bool1 err1 gap =
-        if not bool1 then failwith err1
+      let test_input is_seq gap =
+        let validity_error = "please enter a valid sequence option" in
+        let gap_error = "gap must be a positive integer or zero" in
+        if not is_seq then failwith validity_error
         else if
           not
             (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
@@ -42,12 +42,9 @@ let layout =
                  if String.( = ) (fst x) s then
                    List.exists (snd x) ~f:(fun y -> String.( = ) y a)
                  else false))
-            (s ^ " " ^ a ^ validity_error)
             g
       | [ s; g ] ->
-          test_input
-            (List.exists mono ~f:(fun x -> String.( = ) x s))
-            (s ^ validity_error) g
+          test_input (List.exists mono ~f:(fun x -> String.( = ) x s)) g
       | [ _ ] | _ -> failwith "improper input")
 
 let command =
@@ -80,10 +77,5 @@ let command =
            | None ->
                failwith "a minutes or seconds layout, or both, must be provided"
            ))
-
-(* (let%map_open.Command minutes_seq =
-     anon (maybe ("minutes_seq" %: seq))
-   in
-   fun () -> print_string minutes_seq) *)
 
 let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
