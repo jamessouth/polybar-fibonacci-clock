@@ -1,16 +1,14 @@
-type term = { color : int; value : int; index : int }
+type t = { color : int; value : int; index : int }
 
 let pl f lst =
   let rec print_elements = function
     | [] -> ()
     | h :: t ->
-        print_string "{c:";
-        f h.color;
-        print_string " v:";
-        f h.value;
-        print_string " i:";
-        f h.index;
-        print_string "} ; ";
+        print_string "(";
+        f (fst h);
+        print_string ", ";
+        f (snd h);
+        print_string "); ";
         print_elements t
   in
   print_string "[";
@@ -50,3 +48,4 @@ let get_layout hour minute sequence =
     inner target [] terms
   in
   get_term_list sequence |> get_rando_seq hour 1 |> get_rando_seq minute 2
+  |> List.map (fun x -> (x.color, x.value))
