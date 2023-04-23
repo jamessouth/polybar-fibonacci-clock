@@ -14,6 +14,8 @@ let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
 
 (* let blocks = [ "░"; "▒"; "▓"; "█" ] *)
 
+(* +(4-(60/x)) *)
+
 (* let rec take n l =
    if n = 0 then []
    else match l with [] -> [] | hd :: tl -> hd :: take (n - 1) tl *)
