@@ -1,51 +1,54 @@
 open Core
 
-let mono =
-  [
-    "Semi_Fibonacci";
-    "Tetranacci_numbers";
-    "Tribonacci_numbers";
-    "Fibonacci_numbers";
-    "A034298";
-    "Partition_numbers";
-    "Narayanas_cows";
-    "A331072";
-  ]
+let padovan_15 = [ 1; 1; 1; 1; 2; 2; 3; 4 ]
+let padovan_30 = [ 1; 2; 2; 3; 4; 5; 7; 9 ]
+let pascal_15 = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]
+let fib_tri_15 = [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]
+let div_928_15 = [ 1; 2; 4; 8 ]
 
-let poly =
+let sequence_data =
   [
-    ("Padovan_numbers_sm", [ "15"; "20" ]);
-    ("Pascals_triangle", [ "15"; "20"; "30" ]);
-    ("Fibonacci_triangle", [ "15"; "30" ]);
-    ("Divisors_of_928", [ "15"; "30"; "60" ]);
-    ("Padovan_numbers_lg", [ "30"; "60" ]);
+    ("Semi_Fibonacci", [ 1; 1; 2; 1; 3; 2; 5 ], 15);
+    ("Tetranacci_numbers", [ 1; 1; 1; 1; 4; 7 ], 15);
+    ("Tribonacci_numbers", [ 1; 1; 2; 4; 7 ], 15);
+    ("Padovan_numbers_15", padovan_15, 15);
+    ("Pascals_triangle_15", pascal_15, 15);
+    ("Divisors_of_928_15", div_928_15, 15);
+    ("Fibonacci_triangle_15", fib_tri_15, 15);
+    ("Fibonacci_numbers", [ 1; 1; 2; 3; 5; 8 ], 20);
+    ("Padovan_numbers_20", padovan_15 @ [ 5 ], 20);
+    ("Pascals_triangle_20", pascal_15 @ [ 1; 4 ], 20);
+    ("A034298", [ 1; 2; 3; 4; 6; 6; 8 ], 30);
+    ("Partition_numbers", [ 1; 1; 2; 3; 5; 7; 11 ], 30);
+    ("Pascals_triangle_30", pascal_15 @ [ 1; 4; 6; 4 ], 30);
+    ("Fibonacci_triangle_30", fib_tri_15 @ [ 3; 5; 3; 4 ], 30);
+    ("Divisors_of_928_30", div_928_15 @ [ 16 ], 30);
+    ("Padovan_numbers_30", padovan_30, 30);
+    ("Divisors_of_928_60", div_928_15 @ [ 16; 29 ], 60);
+    ("Narayanas_cows", [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], 60);
+    ("A331072", [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], 60);
+    ("Padovan_numbers_60", padovan_30 @ [ 12; 16 ], 60);
   ]
 
 (* let seq_to_ind = function "15" -> 1 | "20" -> 2 | "30" -> 3 | _ -> 4 *)
 
 let layout =
   Command.Arg_type.create (fun opt_list ->
-      let test_input is_seq gap =
-        let validity_error = "please enter a valid sequence option" in
-        let gap_error = "gap must be a positive integer or zero" in
-        if not is_seq then failwith validity_error
-        else if
-          not
-            (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
-        then failwith gap_error
-        else opt_list
-      in
       match String.split opt_list ~on:' ' with
-      | [ s; a; g ] ->
-          test_input
-            (List.exists poly ~f:(fun x ->
-                 if String.( = ) (fst x) s then
-                   List.exists (snd x) ~f:(fun y -> String.( = ) y a)
-                 else false))
-            g
-      | [ s; g ] ->
-          test_input (List.exists mono ~f:(fun x -> String.( = ) x s)) g
-      | [ _ ] | _ -> failwith "improper input")
+      | [ sq; gap ] ->
+          let gap_error = "gap must be a positive integer or zero" in
+          if
+            not
+              (List.exists sequence_data ~f:(fun x ->
+                   let seq, _, _ = x in
+                   String.( = ) seq sq))
+          then failwith (sq ^ " is not a valid sequence option")
+          else if
+            not
+              (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
+          then failwith gap_error
+          else opt_list
+      | [ _ ] | _ -> failwith "invalid input")
 
 let command =
   Command.basic ~summary:"fib clock"
