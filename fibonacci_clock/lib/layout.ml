@@ -16,7 +16,7 @@ let pl f lst =
   print_string "]";
   print_newline ()
 
-let pint = pl print_int
+let _pint = pl print_int
 
 let get_layout hour minute sequence =
   let get_term_list nums =

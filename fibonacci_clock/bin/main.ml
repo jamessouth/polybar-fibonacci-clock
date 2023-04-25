@@ -90,27 +90,30 @@ let command =
 
      fun () ->
        let get_opts s =
-         let list = String.split s ~on:' ' in let {seq;acc;_} = (List.find_exn sequence_data ~f:(fun x -> String.(=) x.name (List.hd_exn list))) in
+         let list = String.split s ~on:' ' in
+         let { seq; acc; _ } =
+           List.find_exn sequence_data ~f:(fun x ->
+               String.( = ) x.name (List.hd_exn list))
+         in
          (seq, acc, int_of_string (List.hd_exn (List.tl_exn list)))
        in
        match hrs_mins with
        | Some mins -> (
-           let min_seq, min_acc,min_gap = get_opts mins in
+           let min_seq, min_acc, min_gap = get_opts mins in
            match seconds with
-           | Some secs -> (
-               let sec_seq, sec_acc,sec_gap = get_opts secs in
-               match space_between with
-               | Some sb ->
-                   Time.main 
-               | None ->
-                   print_endline
-                     (min_seq ^ min_gap ^ sec_seq ^ sec_gap ^ string_of_int 4))
-           | None -> print_endline (min_seq ^ min_gap))
+           | Some secs ->
+               let sec_seq, sec_acc, sec_gap = get_opts secs in
+               let space =
+                 match space_between with Some sb -> sb | None -> 4
+               in
+               Fibonacci_clock.Time.main ~space
+                 [ (min_seq, min_acc, min_gap); (sec_seq, sec_acc, sec_gap) ]
+           | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ])
        | None -> (
            match seconds with
            | Some secs ->
-               let sec_seq, sec_gap = get_opts secs in
-               print_endline (sec_seq ^ sec_gap)
+               let sec_seq, sec_acc, sec_gap = get_opts secs in
+               Fibonacci_clock.Time.main [ (sec_seq, sec_acc, sec_gap) ]
            | None ->
                failwith
                  "an hrs_mins or seconds layout, or both, must be provided"))

@@ -26,4 +26,4 @@ let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
    else "" *)
 
 
-let main seq acc gap = [] 
+let main ?(space = 0) (layouts:(int list * int * int) list) = print_int space; let _,k,_ = List.hd layouts in print_int k
