@@ -73,17 +73,31 @@ let layout =
           else opt_list
       | [ _ ] | _ -> failwith "invalid input")
 
+
+
+let color_list =
+  Command.Arg_type.create (fun col_list ->
+      match String.split col_list ~on:' ' with
+      | [ _col0; _col1 ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
+      | [ _col0; _col1;_col2;_col3 ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
+
+      
+      
+
+      | [ _ ] | _ -> failwith "invalid input")
+
+
 let command =
   Command.basic ~summary:"fib clock"
     ~readme:(fun () -> "More detailed information")
-    (let%map_open.Command hrs_mins =
-       flag "-mins" (optional layout) ~doc:"layout for hrs_mins clock"
-     and seconds =
-       flag "-secs" (optional layout) ~doc:"layout for seconds clock"
+    (let%map_open.Command first_seq =
+       flag "-s1" (required layout) ~doc:"layout for first clock"
+     and second =
+       flag "-s2" (optional layout) ~doc:"layout for second clock"
      and space_between =
        flag "-sb" (optional int)
          ~doc:
-           "spaces between hrs_mins and seconds clocks, if using both (default \
+           "spaces between clocks, if using both (default \
             4)"
        (* and  *)
      in
@@ -97,10 +111,10 @@ let command =
          in
          (seq, acc, int_of_string (List.hd_exn (List.tl_exn list)))
        in
-       match hrs_mins with
-       | Some mins -> (
-           let min_seq, min_acc, min_gap = get_opts mins in
-           match seconds with
+      
+     
+           let min_seq, min_acc, min_gap = get_opts first_seq in
+           match second with
            | Some secs ->
                let sec_seq, sec_acc, sec_gap = get_opts secs in
                let space =
@@ -108,14 +122,10 @@ let command =
                in
                Fibonacci_clock.Time.main ~space
                  [ (min_seq, min_acc, min_gap); (sec_seq, sec_acc, sec_gap) ]
-           | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ])
-       | None -> (
-           match seconds with
-           | Some secs ->
-               let sec_seq, sec_acc, sec_gap = get_opts secs in
-               Fibonacci_clock.Time.main [ (sec_seq, sec_acc, sec_gap) ]
-           | None ->
-               failwith
-                 "an hrs_mins or seconds layout, or both, must be provided"))
+           | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ]
+
+
+
+                 )
 
 let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
