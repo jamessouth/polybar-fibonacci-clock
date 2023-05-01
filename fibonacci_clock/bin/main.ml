@@ -1,8 +1,8 @@
 open Core
 
-type seq = { name : string; seq : int list; acc : int }
+(* type seq = { name : string; seq : int list; acc : int } *)
 
-let sequence_data =
+(* let sequence_data =
   [
     { name = "Semi_Fibonacci"; seq = [ 1; 1; 2; 1; 3; 2; 5 ]; acc = 15 };
     { name = "Tetranacci_numbers"; seq = [ 1; 1; 1; 1; 4; 7 ]; acc = 15 };
@@ -56,9 +56,9 @@ let sequence_data =
       seq = [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ];
       acc = 60;
     };
-  ]
+  ] *)
 
-let layout =
+(* let layout =
   Command.Arg_type.create (fun opt_list ->
       match String.split opt_list ~on:' ' with
       | [ sq; gap ] ->
@@ -71,27 +71,48 @@ let layout =
               (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
           then failwith gap_error
           else opt_list
-      | [ _ ] | _ -> failwith "invalid input")
+      | [ _ ] | _ -> failwith "invalid input") *)
 
 
 
-let color_list =
+(* let color_list =
   Command.Arg_type.create (fun col_list ->
       match String.split col_list ~on:' ' with
-      | [ _col0; _col1 ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
-      | [ _col0; _col1;_col2;_col3 ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
+      | [ _; _ ] 
+      (* as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x) *)
+      | [ _; _;_;_ ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
 
-      
-      
+      | [ _ ] | _ -> failwith "invalid input") *)
 
-      | [ _ ] | _ -> failwith "invalid input")
+      let one =
+        Command.basic
+          ~summary:"one clock"
+          (let%map_open.Command seq = anon ("sequence" %: string)
+            and gap = anon ("gap" %: int) and colors = anon (t2 (t2 ("color0" %: string) ("color1" %: string)) (maybe (t2 ("color2" %: string) ("color3" %: string)))) in
+            fun () ->  print_string seq; Stdlib.print_int gap; let a,b = colors in Stdlib.print_string ((fst a)^(snd a));match b with None -> () | Some (x,y) -> Stdlib.print_string (x^y))
+
+      let two =
+        Command.basic
+          ~summary:"two clocks"
+          (let%map_open.Command seq0 = anon ("sequence" %: string)
+            and gap0 = anon ("gap" %: int) and colors0 = anon (t4 ("color0" %: string) ("color1" %: string) ("color2" %: string) ("color3" %: string)) and seq1 = anon ("sequence" %: string)
+            and gap1 = anon ("gap" %: int) and colors1 = anon (t2 ("color0" %: string) ("color1" %: string)) in
+            fun () ->  print_string (seq0^seq1); Stdlib.print_int (gap0+gap1); let a,b,c,d = colors0 in let e,f = colors1 in Stdlib.print_string (a^b^c^d^e^f))
+
+            let command =
+              Command.group
+                ~summary:"fib clock"
+                [ "one", one; "two", two ]
 
 
-let command =
+
+(* let command =
   Command.basic ~summary:"fib clock"
     ~readme:(fun () -> "More detailed information")
     (let%map_open.Command first_seq =
        flag "-s1" (required layout) ~doc:"layout for first clock"
+     and first_cols =
+       flag "-c1" (required color_list) ~doc:"colors for first clock"
      and second =
        flag "-s2" (optional layout) ~doc:"layout for second clock"
      and space_between =
@@ -111,8 +132,6 @@ let command =
          in
          (seq, acc, int_of_string (List.hd_exn (List.tl_exn list)))
        in
-      
-     
            let min_seq, min_acc, min_gap = get_opts first_seq in
            match second with
            | Some secs ->
@@ -123,9 +142,6 @@ let command =
                Fibonacci_clock.Time.main ~space
                  [ (min_seq, min_acc, min_gap); (sec_seq, sec_acc, sec_gap) ]
            | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ]
-
-
-
-                 )
+                 ) *)
 
 let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
