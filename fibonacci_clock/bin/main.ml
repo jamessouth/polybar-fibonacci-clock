@@ -1,8 +1,8 @@
 open Core
 
-(* type seq = { name : string; seq : int list; acc : int } *)
+type seq = { name : string; seq : int list; acc : int }
 
-(* let sequence_data =
+let sequence_data =
   [
     { name = "Semi_Fibonacci"; seq = [ 1; 1; 2; 1; 3; 2; 5 ]; acc = 15 };
     { name = "Tetranacci_numbers"; seq = [ 1; 1; 1; 1; 4; 7 ]; acc = 15 };
@@ -56,41 +56,38 @@ open Core
       seq = [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ];
       acc = 60;
     };
-  ] *)
+  ]
 
-(* let layout =
-  Command.Arg_type.create (fun opt_list ->
-      match String.split opt_list ~on:' ' with
-      | [ sq; gap ] ->
-          let gap_error = "gap must be a positive integer or zero" in
-          if
-            not (List.exists sequence_data ~f:(fun x -> String.( = ) x.name sq))
-          then failwith (sq ^ " is not a valid sequence option")
-          else if
-            not
-              (try int_of_string gap > -1 with Failure _ -> failwith gap_error)
-          then failwith gap_error
-          else opt_list
-      | [ _ ] | _ -> failwith "invalid input") *)
+
+  
 
 
 
-(* let color_list =
-  Command.Arg_type.create (fun col_list ->
-      match String.split col_list ~on:' ' with
-      | [ _; _ ] 
-      (* as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x) *)
-      | [ _; _;_;_ ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
-
-      | [ _ ] | _ -> failwith "invalid input") *)
+let check_color_list = function
+    | [ _; _ ] 
+    | [ _; _;_;_ ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
+    | [ _ ] | _ -> failwith "invalid input"
 
       let minutes =
         Command.basic
           ~summary:"An hours/minutes clock"
           ~readme:(fun () -> "Takes a sequence, a gap, and four hex colors (off, minutes, hours, both)")
-          (let%map_open.Command seq = anon ("sequence" %: string)
-            and gap = anon ("gap" %: int) and colors = anon (t4  ("off" %: string) ("minutes" %: string) ("hours" %: string) ("both" %: string)) in
-            fun () ->  print_string seq; Stdlib.print_int gap; let a,b,c,d = colors in Stdlib.print_string (a^b^c^d))
+          (let%map_open.Command 
+          seq = anon ("sequence" %: string)
+            and
+             gap = anon ("gap" %: int) and 
+             colors = anon (sequence ("colors" %: string)) 
+
+            in fun () ->
+               let () = if not (List.exists sequence_data ~f:(fun x -> String.( = ) x.name seq))
+              then failwith (seq ^ " is not a valid sequence option") in 
+               let () = if gap < 0 
+              then failwith "gap must be a positive integer or zero"  in
+               let () = if Int.(<>) (List.length colors) 4 then
+                failwith "enter four hex colors, with or without a leading '#'" 
+              
+              
+              in  print_string seq; Stdlib.print_int gap;  Stdlib.print_string (a^b^c^d))
       let seconds =
         Command.basic
           ~summary:"A seconds clock"
