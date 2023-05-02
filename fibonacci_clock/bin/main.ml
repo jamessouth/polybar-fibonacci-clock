@@ -84,25 +84,39 @@ open Core
 
       | [ _ ] | _ -> failwith "invalid input") *)
 
-      let one =
+      let minutes =
         Command.basic
-          ~summary:"one clock"
+          ~summary:"An hours/minutes clock"
+          ~readme:(fun () -> "Takes a sequence, a gap, and four hex colors (off, minutes, hours, both)")
           (let%map_open.Command seq = anon ("sequence" %: string)
-            and gap = anon ("gap" %: int) and colors = anon (t2 (t2 ("color0" %: string) ("color1" %: string)) (maybe (t2 ("color2" %: string) ("color3" %: string)))) in
-            fun () ->  print_string seq; Stdlib.print_int gap; let a,b = colors in Stdlib.print_string ((fst a)^(snd a));match b with None -> () | Some (x,y) -> Stdlib.print_string (x^y))
-
-      let two =
+            and gap = anon ("gap" %: int) and colors = anon (t4  ("off" %: string) ("minutes" %: string) ("hours" %: string) ("both" %: string)) in
+            fun () ->  print_string seq; Stdlib.print_int gap; let a,b,c,d = colors in Stdlib.print_string (a^b^c^d))
+      let seconds =
         Command.basic
-          ~summary:"two clocks"
-          (let%map_open.Command seq0 = anon ("sequence" %: string)
-            and gap0 = anon ("gap" %: int) and colors0 = anon (t4 ("color0" %: string) ("color1" %: string) ("color2" %: string) ("color3" %: string)) and seq1 = anon ("sequence" %: string)
-            and gap1 = anon ("gap" %: int) and colors1 = anon (t2 ("color0" %: string) ("color1" %: string)) in
-            fun () ->  print_string (seq0^seq1); Stdlib.print_int (gap0+gap1); let a,b,c,d = colors0 in let e,f = colors1 in Stdlib.print_string (a^b^c^d^e^f))
+          ~summary:"A seconds clock"
+          ~readme:(fun () -> "Takes a sequence, a gap, and two hex colors (off and on)")
+          (let%map_open.Command seq = anon ("sequence" %: string)
+            and gap = anon ("gap" %: int) and colors = anon (t2  ("off" %: string) ("on" %: string) ) in
+            fun () ->  print_string seq; Stdlib.print_int gap; let a,b = colors in Stdlib.print_string (a^b))
+
+            
+      let both =
+        Command.basic
+          ~summary:"An hours/minutes clock and a seconds clock"
+          ~readme:(fun () -> "Takes two sequences, two gaps, the number of spaces to put between the clocks, and six hex colors")
+          (let%map_open.Command 
+          seqs = anon (t2 ("seq0" %: string) ("seq1" %: string) ) and 
+          gaps = anon (t2 ("gap0" %: int) ("gap1" %: int)) and 
+          spaces = anon ("spaces" %: int) and 
+          colors = anon (sequence ("colors" %: string)) 
+             in
+            fun () ->  print_string ((fst seqs)^(snd seqs)); Stdlib.print_int ((fst gaps)+(snd gaps)+spaces); Stdlib.print_int (Stdlib.List.length colors))
 
             let command =
               Command.group
-                ~summary:"fib clock"
-                [ "one", one; "two", two ]
+                ~summary:"\nA Fibonacci clock for polybar"
+                ~readme:(fun () -> "More detailed information")
+                [ "both", both ;"mins", minutes; "secs", seconds;]
 
 
 
