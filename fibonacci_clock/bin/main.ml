@@ -4,39 +4,39 @@ type seq = { name : string; _seq : int list; _acc : int }
 
 let sequence_data =
   [
-    (* { name = "Semi_Fibonacci"; _seq = [ 1; 1; 2; 1; 3; 2; 5 ]; _acc = 15 }; *)
-    (* { name = "Tetranacci_numbers"; _seq = [ 1; 1; 1; 1; 4; 7 ]; _acc = 15 }; *)
-    (* { name = "Tribonacci_numbers"; _seq = [ 1; 1; 2; 4; 7 ]; _acc = 15 }; *)
-    (* { name = "Padovan_numbers_15"; _seq = [ 1; 1; 1; 1; 2; 2; 3; 4 ]; _acc = 15 }; *)
-    (* {
+    { name = "Semi_Fibonacci"; _seq = [ 1; 1; 2; 1; 3; 2; 5 ]; _acc = 15 };
+    { name = "Tetranacci_numbers"; _seq = [ 1; 1; 1; 1; 4; 7 ]; _acc = 15 };
+    { name = "Tribonacci_numbers"; _seq = [ 1; 1; 2; 4; 7 ]; _acc = 15 };
+    { name = "Padovan_numbers_15"; _seq = [ 1; 1; 1; 1; 2; 2; 3; 4 ]; _acc = 15 };
+    {
       name = "Pascals_triangle_15";
       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ];
       _acc = 15;
-    }; *)
-    (* { name = "Divisors_of_928_15"; _seq = [ 1; 2; 4; 8 ]; _acc = 15 }; *)
-    (* {
+    };
+    { name = "Divisors_of_928_15"; _seq = [ 1; 2; 4; 8 ]; _acc = 15 };
+    {
       name = "Fibonacci_triangle_15";
       _seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ];
       _acc = 15;
-    }; *)
-    (* { name = "Fibonacci_numbers"; _seq = [ 1; 1; 2; 3; 5; 8 ]; _acc = 20 }; *)
-    (* {
+    };
+    { name = "Fibonacci_numbers"; _seq = [ 1; 1; 2; 3; 5; 8 ]; _acc = 20 };
+    {
       name = "Padovan_numbers_20";
       _seq = [ 1; 1; 1; 1; 2; 2; 3; 4; 5 ];
       _acc = 20;
-    }; *)
-    (* {
+    };
+    {
       name = "Pascals_triangle_20";
       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ];
       _acc = 20;
-    }; *)
-    (* { name = "A034298"; _seq = [ 1; 2; 3; 4; 6; 6; 8 ]; _acc = 30 }; *)
-    (* { name = "Partition_numbers"; _seq = [ 1; 1; 2; 3; 5; 7; 11 ]; _acc = 30 }; *)
-    (* {
+    };
+    { name = "A034298"; _seq = [ 1; 2; 3; 4; 6; 6; 8 ]; _acc = 30 };
+    { name = "Partition_numbers"; _seq = [ 1; 1; 2; 3; 5; 7; 11 ]; _acc = 30 };
+    {
       name = "Pascals_triangle_30";
       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ];
       _acc = 30;
-    }; *)
+    };
     {
       name = "Fibonacci_triangle_30";
       _seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ];
@@ -156,8 +156,57 @@ in      Command.basic
         gap = anon ("gap" %: int) and 
          colors = anon (sequence ("colors" %: string)) in
           fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let fibonacci_triangle_30 = let gg = [ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]
+in      Command.basic
+        ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let divisors_of_928_30 = let gg = [ 1; 2; 4; 8; 16 ]
+in      Command.basic
+        ~summary:"[ 1; 2; 4; 8; 16 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let padovan_numbers_30 = let gg = [ 1; 2; 2; 3; 4; 5; 7; 9 ]
+in      Command.basic
+        ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let divisors_of_928_60 = let gg = [ 1; 2; 4; 8; 16; 29 ]
+in      Command.basic
+        ~summary:"[ 1; 2; 4; 8; 16; 29 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let narayanas_cows = let gg = [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]
+in      Command.basic
+        ~summary:"[ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let a331072 = let gg = [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]
+in      Command.basic
+        ~summary:"[ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
+    let padovan_numbers_60 = let gg = [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]
+in      Command.basic
+        ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]"
+        (let%map_open.Command path = path and
+        gap = anon ("gap" %: int) and 
+         colors = anon (sequence ("colors" %: string)) in
+          fun () -> Stdlib.print_int (Stdlib.List.length path+Stdlib.List.length gg+ gap+Stdlib.List.length colors))
 
-let minutes =
+(* let minutes =
   Command.basic ~summary:"An hours/minutes clock"
   ~readme:(fun () ->
     "Takes a sequence name from the(string), a gap (int), and four 6-digit hex colors with leading # (off, minutes, hours, both)\nEx: A331072 5 #ffffff #00ff00 #ff0000 #0000ff")
@@ -180,7 +229,7 @@ let minutes =
        in
        print_string seq;
        Stdlib.print_int gap;
-       List.iter colors ~f:Stdlib.print_string)
+       List.iter colors ~f:Stdlib.print_string) *)
 
 (* let seconds =
   Command.basic ~summary:"A seconds clock"
@@ -230,16 +279,57 @@ let minutes =
          print_endline "HELP!";
          print_endline (Lazy.force help)) *)
 
+let minutes =
+  Command.group ~summary:"\nA Fibonacci clock for polybar"
+    ~readme:(fun () -> "More detailed information222")
+    ~preserve_subcommand_order:()
+    [("semi-Fibonacci", semi_Fibonacci);
+ ("tetranacci-numbers", tetranacci_numbers);
+ ("tribonacci-numbers", tribonacci_numbers);
+ ("padovan-numbers-15", padovan_numbers_15);
+ ("pascals-triangle-15", pascals_triangle_15);
+ ("divisors-of-928-15", divisors_of_928_15);
+ ("fibonacci-triangle-15", fibonacci_triangle_15);
+ ("fibonacci-numbers", fibonacci_numbers);
+ ("padovan-numbers-20", padovan_numbers_20);
+ ("pascals-triangle-20", pascals_triangle_20); ("a034298", a034298);
+ ("partition-numbers", partition_numbers);
+ ("pascals-triangle-30", pascals_triangle_30);
+ ("fibonacci-triangle-30", fibonacci_triangle_30);
+ ("divisors-of-928-30", divisors_of_928_30);
+ ("padovan-numbers-30", padovan_numbers_30);
+ ("divisors-of-928-60", divisors_of_928_60);
+ ("narayanas-cows", narayanas_cows); ("a331072", a331072);
+ ("padovan-numbers-60", padovan_numbers_60)]
+
+
 let seconds =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information")
+    ~readme:(fun () -> "More detailed information111")
     ~preserve_subcommand_order:()
-    [ ("semi-Fib", semi_Fibonacci) ]
+    [("semi-Fibonacci", semi_Fibonacci);
+ ("tetranacci-numbers", tetranacci_numbers);
+ ("tribonacci-numbers", tribonacci_numbers);
+ ("padovan-numbers-15", padovan_numbers_15);
+ ("pascals-triangle-15", pascals_triangle_15);
+ ("divisors-of-928-15", divisors_of_928_15);
+ ("fibonacci-triangle-15", fibonacci_triangle_15);
+ ("fibonacci-numbers", fibonacci_numbers);
+ ("padovan-numbers-20", padovan_numbers_20);
+ ("pascals-triangle-20", pascals_triangle_20); ("a034298", a034298);
+ ("partition-numbers", partition_numbers);
+ ("pascals-triangle-30", pascals_triangle_30);
+ ("fibonacci-triangle-30", fibonacci_triangle_30);
+ ("divisors-of-928-30", divisors_of_928_30);
+ ("padovan-numbers-30", padovan_numbers_30);
+ ("divisors-of-928-60", divisors_of_928_60);
+ ("narayanas-cows", narayanas_cows); ("a331072", a331072);
+ ("padovan-numbers-60", padovan_numbers_60)]
 
 
-let command_0 =
+let command =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information")
+    ~readme:(fun () -> "More detailed information000")
     ~preserve_subcommand_order:()
     [ ("seconds", seconds); ("minutes", minutes);
      (* ("both", both)  *)
@@ -283,4 +373,4 @@ let command_0 =
             | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ]
                   ) *)
 
-let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command_0
+let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
