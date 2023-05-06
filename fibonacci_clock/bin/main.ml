@@ -65,11 +65,30 @@ open Core
 
 let parse seq =
   let%map_open.Command path = path
-  and gap = anon ("gap" %: int)
+  (* and gap0 = anon ("gap0" %: int) *)
+
+
+  and gap0 = flag
+         "-g"
+         (required int)
+         ~doc:"int Gap for the first clock"
+  and gap1 = flag
+         "-gg"
+         (optional int)
+         ~doc:"int Gap for the second clock"
+  and spaces = flag
+         "-s"
+         (optional int)
+         ~doc:"int Spaces between clocks"
+
+
+
   and colors = anon (sequence ("colors" %: string)) in
   fun () ->
+    match spaces with None -> () | Some s -> Stdlib.print_int s;
+    match gap1 with None -> () | Some g -> Stdlib.print_int g;
     Stdlib.print_int
-      (Stdlib.List.length path + Stdlib.List.length seq + gap
+      (Stdlib.List.length path + Stdlib.List.length seq + gap0
      + Stdlib.List.length colors);
     List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " "))
 
@@ -282,7 +301,7 @@ let both =
       ("padovan-numbers-60", coll);
     ]
 
-let minutes =
+(* let minutes =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
     ~readme:(fun () -> "More detailed information222")
     ~preserve_subcommand_order:()
@@ -307,9 +326,9 @@ let minutes =
       ("narayanas-cows", narayanas_cows);
       ("a331072", a331072);
       ("padovan-numbers-60", padovan_numbers_60);
-    ]
+    ] *)
 
-let seconds =
+let one =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
     ~readme:(fun () -> "More detailed information111")
     ~preserve_subcommand_order:()
@@ -340,7 +359,7 @@ let command =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
     ~readme:(fun () -> "More detailed information000")
     ~preserve_subcommand_order:()
-    [ ("seconds", seconds); ("minutes", minutes); ("both", both) ]
+    [ ("one", one);("both", both) ]
 
 (* let command =
    Command.basic ~summary:"fib clock"
