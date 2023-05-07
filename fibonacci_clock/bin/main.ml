@@ -65,32 +65,51 @@ open Core
 
 let parse seq =
   let%map_open.Command path = path
-  (* and gap0 = anon ("gap0" %: int) *)
-
-
-  and gap0 = flag
-         "-g"
-         (required int)
-         ~doc:"int Gap for the first clock"
-  and gap1 = flag
-         "-gg"
-         (optional int)
-         ~doc:"int Gap for the second clock"
-  and spaces = flag
-         "-s"
-         (optional int)
-         ~doc:"int Spaces between clocks"
-
-
-
+  and gap0 = flag "-g" (required int) ~doc:"int Gap for the first clock"
+  and gap1 =
+    flag "-gg" (optional_with_default 2 int) ~doc:"int Gap for the second clock"
+  and spaces =
+    flag "-s" (optional_with_default 2 int) ~doc:"int Spaces between clocks"
   and colors = anon (sequence ("colors" %: string)) in
+
   fun () ->
-    match spaces with None -> () | Some s -> Stdlib.print_int s;
-    match gap1 with None -> () | Some g -> Stdlib.print_int g;
-    Stdlib.print_int
-      (Stdlib.List.length path + Stdlib.List.length seq + gap0
-     + Stdlib.List.length colors);
-    List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " "))
+    List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " "));
+
+    let comp_len = Int.( <> ) (List.length colors) in
+    match List.nth_exn path 1 with
+    | "one" ->
+        let gap1 = 0
+        and spaces = 0
+        and () =
+          if comp_len 2 || comp_len 4 then
+            failwith
+              "enter two (for seconds) or four (for minutes) 6-digit hex colors"
+        in
+
+        Stdlib.print_int
+          (Stdlib.List.length path + Stdlib.List.length seq + gap0 + gap1
+         + spaces + Stdlib.List.length colors)
+    | "both" ->
+        let () =
+          if comp_len 2 then
+            failwith
+              "enter six 6-digit hex colors, four for minutes (off, minutes, \
+               hours, both) and two for seconds (off, on)"
+        in
+
+        Stdlib.print_int
+          (Stdlib.List.length path + Stdlib.List.length seq + gap0 + gap1
+         + spaces + Stdlib.List.length colors)
+    | _ -> failwith "oops"
+
+(* let () =
+     if gap < 0 then failwith "gap must be a positive integer or zero"
+   in
+   let () =
+     if Int.( <> ) (List.length colors) 4 then
+       failwith
+         "enter four 6-digit hex colors, with or without a leading '#'"
+   in *)
 
 let semi_Fibonacci =
   let seq = [ 1; 1; 2; 1; 3; 2; 5 ] in
@@ -302,31 +321,31 @@ let both =
     ]
 
 (* let minutes =
-  Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information222")
-    ~preserve_subcommand_order:()
-    [
-      ("semi-Fibonacci", semi_Fibonacci);
-      ("tetranacci-numbers", tetranacci_numbers);
-      ("tribonacci-numbers", tribonacci_numbers);
-      ("padovan-numbers-15", padovan_numbers_15);
-      ("pascals-triangle-15", pascals_triangle_15);
-      ("divisors-of-928-15", divisors_of_928_15);
-      ("fibonacci-triangle-15", fibonacci_triangle_15);
-      ("fibonacci-numbers", fibonacci_numbers);
-      ("padovan-numbers-20", padovan_numbers_20);
-      ("pascals-triangle-20", pascals_triangle_20);
-      ("a034298", a034298);
-      ("partition-numbers", partition_numbers);
-      ("pascals-triangle-30", pascals_triangle_30);
-      ("fibonacci-triangle-30", fibonacci_triangle_30);
-      ("divisors-of-928-30", divisors_of_928_30);
-      ("padovan-numbers-30", padovan_numbers_30);
-      ("divisors-of-928-60", divisors_of_928_60);
-      ("narayanas-cows", narayanas_cows);
-      ("a331072", a331072);
-      ("padovan-numbers-60", padovan_numbers_60);
-    ] *)
+   Command.group ~summary:"\nA Fibonacci clock for polybar"
+     ~readme:(fun () -> "More detailed information222")
+     ~preserve_subcommand_order:()
+     [
+       ("semi-Fibonacci", semi_Fibonacci);
+       ("tetranacci-numbers", tetranacci_numbers);
+       ("tribonacci-numbers", tribonacci_numbers);
+       ("padovan-numbers-15", padovan_numbers_15);
+       ("pascals-triangle-15", pascals_triangle_15);
+       ("divisors-of-928-15", divisors_of_928_15);
+       ("fibonacci-triangle-15", fibonacci_triangle_15);
+       ("fibonacci-numbers", fibonacci_numbers);
+       ("padovan-numbers-20", padovan_numbers_20);
+       ("pascals-triangle-20", pascals_triangle_20);
+       ("a034298", a034298);
+       ("partition-numbers", partition_numbers);
+       ("pascals-triangle-30", pascals_triangle_30);
+       ("fibonacci-triangle-30", fibonacci_triangle_30);
+       ("divisors-of-928-30", divisors_of_928_30);
+       ("padovan-numbers-30", padovan_numbers_30);
+       ("divisors-of-928-60", divisors_of_928_60);
+       ("narayanas-cows", narayanas_cows);
+       ("a331072", a331072);
+       ("padovan-numbers-60", padovan_numbers_60);
+     ] *)
 
 let one =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
@@ -359,7 +378,7 @@ let command =
   Command.group ~summary:"\nA Fibonacci clock for polybar"
     ~readme:(fun () -> "More detailed information000")
     ~preserve_subcommand_order:()
-    [ ("one", one);("both", both) ]
+    [ ("one", one); ("both", both) ]
 
 (* let command =
    Command.basic ~summary:"fib clock"
