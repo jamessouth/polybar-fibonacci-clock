@@ -67,40 +67,42 @@ let parse seq =
   let%map_open.Command path = path
   and gap0 = flag "-g" (required int) ~doc:"int Gap for the first clock"
   and gap1 =
-    flag "-gg" (optional_with_default 2 int) ~doc:"int Gap for the second clock"
+    flag "-gg"
+      (optional_with_default 4 int)
+      ~doc:"int Gap for optional second clock (default 4)"
   and spaces =
-    flag "-s" (optional_with_default 2 int) ~doc:"int Spaces between clocks"
+    flag "-s"
+      (optional_with_default 2 int)
+      ~doc:"int Spaces between clocks when using two (default 2)"
   and colors = anon (sequence ("colors" %: string)) in
 
   fun () ->
     List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " "));
 
-    let comp_len = Int.( <> ) (List.length colors) in
-    match List.nth_exn path 1 with
-    | "one" ->
-        let gap1 = 0
-        and spaces = 0
-        and () =
-          if comp_len 2 || comp_len 4 then
-            failwith
-              "enter two (for seconds) or four (for minutes) 6-digit hex colors"
-        in
-
-        Stdlib.print_int
-          (Stdlib.List.length path + Stdlib.List.length seq + gap0 + gap1
-         + spaces + Stdlib.List.length colors)
-    | "both" ->
-        let () =
-          if comp_len 2 then
-            failwith
-              "enter six 6-digit hex colors, four for minutes (off, minutes, \
-               hours, both) and two for seconds (off, on)"
-        in
-
-        Stdlib.print_int
-          (Stdlib.List.length path + Stdlib.List.length seq + gap0 + gap1
-         + spaces + Stdlib.List.length colors)
-    | _ -> failwith "oops"
+    match (List.nth_exn path 1, List.length colors) with
+    | "one", 2 ->
+      let gap1 = 0
+        and spaces = 0 in
+        Stdlib.print_int (List.hd_exn seq);
+        Stdlib.print_int gap0;
+        Stdlib.print_int gap1;
+        Stdlib.print_int spaces;
+        Stdlib.print_int (Stdlib.List.length colors)
+    | "one", 4 ->
+      let gap1 = 0
+        and spaces = 0 in
+        Stdlib.print_int (List.hd_exn seq);
+        Stdlib.print_int gap0;
+        Stdlib.print_int gap1;
+        Stdlib.print_int spaces;
+        Stdlib.print_int (Stdlib.List.length colors)
+    | "both", 6 ->
+      Stdlib.print_int (List.hd_exn seq);  
+      Stdlib.print_int gap0;
+        Stdlib.print_int gap1;
+        Stdlib.print_int spaces;
+        Stdlib.print_int (Stdlib.List.length colors)
+    | _ -> failwith "wrong number of colors entered"
 
 (* let () =
      if gap < 0 then failwith "gap must be a positive integer or zero"
