@@ -1,69 +1,35 @@
 open Core
 
-(* type seq = { name : string; _seq : int list; _acc : int } *)
-
-(* let sequence_data =
-   [
-     { name = "Semi_Fibonacci"; _seq = [ 1; 1; 2; 1; 3; 2; 5 ]; _acc = 15 };
-     { name = "Tetranacci_numbers"; _seq = [ 1; 1; 1; 1; 4; 7 ]; _acc = 15 };
-     { name = "Tribonacci_numbers"; _seq = [ 1; 1; 2; 4; 7 ]; _acc = 15 };
-     { name = "Padovan_numbers_15"; _seq = [ 1; 1; 1; 1; 2; 2; 3; 4 ]; _acc = 15 };
-     {
-       name = "Pascals_triangle_15";
-       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ];
-       _acc = 15;
-     };
-     { name = "Divisors_of_928_15"; _seq = [ 1; 2; 4; 8 ]; _acc = 15 };
-     {
-       name = "Fibonacci_triangle_15";
-       _seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ];
-       _acc = 15;
-     };
-     { name = "Fibonacci_numbers"; _seq = [ 1; 1; 2; 3; 5; 8 ]; _acc = 20 };
-     {
-       name = "Padovan_numbers_20";
-       _seq = [ 1; 1; 1; 1; 2; 2; 3; 4; 5 ];
-       _acc = 20;
-     };
-     {
-       name = "Pascals_triangle_20";
-       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ];
-       _acc = 20;
-     };
-     { name = "A034298"; _seq = [ 1; 2; 3; 4; 6; 6; 8 ]; _acc = 30 };
-     { name = "Partition_numbers"; _seq = [ 1; 1; 2; 3; 5; 7; 11 ]; _acc = 30 };
-     {
-       name = "Pascals_triangle_30";
-       _seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ];
-       _acc = 30;
-     };
-     {
-       name = "Fibonacci_triangle_30";
-       _seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ];
-       _acc = 30;
-     };
-     { name = "Divisors_of_928_30"; _seq = [ 1; 2; 4; 8; 16 ]; _acc = 30 };
-     { name = "Padovan_numbers_30"; _seq = [ 1; 2; 2; 3; 4; 5; 7; 9 ]; _acc = 30 };
-     { name = "Divisors_of_928_60"; _seq = [ 1; 2; 4; 8; 16; 29 ]; _acc = 60 };
-     {
-       name = "Narayanas_cows";
-       _seq = [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ];
-       _acc = 60;
-     };
-     { name = "A331072"; _seq = [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]; _acc = 60 };
-     {
-       name = "Padovan_numbers_60";
-       _seq = [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ];
-       _acc = 60;
-     };
-   ] *)
+let sequence_data =
+  [
+    ("semi-fibonacci", [ 1; 1; 2; 1; 3; 2; 5 ]);
+    ("tetranacci-numbers", [ 1; 1; 1; 1; 4; 7 ]);
+    ("tribonacci-numbers", [ 1; 1; 2; 4; 7 ]);
+    ("padovan-numbers-15", [ 1; 1; 1; 1; 2; 2; 3; 4 ]);
+    ("pascals-triangle-15", [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]);
+    ("divisors-of-928-15", [ 1; 2; 4; 8 ]);
+    ("fibonacci-triangle-15", [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]);
+    ("fibonacci-numbers", [ 1; 1; 2; 3; 5; 8 ]);
+    ("padovan-numbers-20", [ 1; 1; 1; 1; 2; 2; 3; 4; 5 ]);
+    ("pascals-triangle-20", [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ]);
+    ("a034298", [ 1; 2; 3; 4; 6; 6; 8 ]);
+    ("partition-numbers", [ 1; 1; 2; 3; 5; 7; 11 ]);
+    ("pascals-triangle-30", [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ]);
+    ("fibonacci-triangle-30", [ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]);
+    ("divisors-of-928-30", [ 1; 2; 4; 8; 16 ]);
+    ("padovan-numbers-30", [ 1; 2; 2; 3; 4; 5; 7; 9 ]);
+    ("divisors-of-928-60", [ 1; 2; 4; 8; 16; 29 ]);
+    ("narayanas-cows", [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]);
+    ("a331072", [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]);
+    ("padovan-numbers-60", [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]);
+  ]
 
 (* let check_color_list = function
     | [ _; _ ]
     | [ _; _;_;_ ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
     | [ _ ] | _ -> failwith "invalid input" *)
 
-let parse seq =
+let parse =
   let%map_open.Command path = path
   and gap0 = flag "-g" (required int) ~doc:"int Gap for the first clock"
   and gap1 =
@@ -81,306 +47,112 @@ let parse seq =
 
     match (List.nth_exn path 1, List.length colors) with
     | "one", 2 ->
-      let gap1 = 0
-        and spaces = 0 in
-        Stdlib.print_int (List.hd_exn seq);
+        let gap1 = 0 and spaces = 0 in
         Stdlib.print_int gap0;
         Stdlib.print_int gap1;
         Stdlib.print_int spaces;
         Stdlib.print_int (Stdlib.List.length colors)
     | "one", 4 ->
-      let gap1 = 0
-        and spaces = 0 in
-        Stdlib.print_int (List.hd_exn seq);
+        let gap1 = 0 and spaces = 0 in
         Stdlib.print_int gap0;
         Stdlib.print_int gap1;
         Stdlib.print_int spaces;
         Stdlib.print_int (Stdlib.List.length colors)
     | "both", 6 ->
-      Stdlib.print_int (List.hd_exn seq);  
-      Stdlib.print_int gap0;
+        Stdlib.print_int gap0;
         Stdlib.print_int gap1;
         Stdlib.print_int spaces;
         Stdlib.print_int (Stdlib.List.length colors)
-    | _ -> failwith "wrong number of colors entered"
+    | _ -> failwith "invalid input"
 
-(* let () =
-     if gap < 0 then failwith "gap must be a positive integer or zero"
-   in
-   let () =
-     if Int.( <> ) (List.length colors) 4 then
-       failwith
-         "enter four 6-digit hex colors, with or without a leading '#'"
-   in *)
+let subcommand_list =
+  List.map sequence_data ~f:(fun x ->
+      ( fst x,
+        Command.basic
+          ~summary:
+            (List.fold (snd x) ~init:"" ~f:(fun acc y ->
+                 acc ^ string_of_int y ^ " "))
+          parse ))
 
-let semi_Fibonacci =
-  let seq = [ 1; 1; 2; 1; 3; 2; 5 ] in
-  Command.basic ~summary:"[ 1; 1; 2; 1; 3; 2; 5 ]" (seq |> parse)
+let get_group sum rdme lst =
+  Command.group ~summary:sum
+    ~readme:(fun () -> rdme)
+    ~preserve_subcommand_order:() lst
 
-let tetranacci_numbers =
-  let seq = [ 1; 1; 1; 1; 4; 7 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 4; 7 ]" (seq |> parse)
+let () =
+  Command_unix.run ~version:"1.0" ~build_info:"RWO"
+    (get_group "\nA fibonacci clock for polybar" "More detailed information000"
+       [
+         ( "one",
+           get_group "\nA fibonacci clock for polybar"
+             "More detailed information111" subcommand_list );
+         ( "both",
+           get_group "\nA fibonacci clock for polybar"
+             "More detailed information333"
+             (List.map sequence_data ~f:(fun x ->
+                  ( fst x,
+                    get_group "" "More detailed information444" subcommand_list
+                  ))) );
+       ])
 
-let tribonacci_numbers =
-  let seq = [ 1; 1; 2; 4; 7 ] in
-  Command.basic ~summary:"[ 1; 1; 2; 4; 7 ]" (seq |> parse)
+(* [
+     ("semi-fibonacci", Command.basic ~summary:"[ 1; 1; 2; 1; 3; 2; 5 ]" parse);
+     ("tetranacci-numbers", Command.basic ~summary:"[ 1; 1; 1; 1; 4; 7 ]" parse);
+     ("tribonacci-numbers", Command.basic ~summary:"[ 1; 1; 2; 4; 7 ]" parse);
+     ( "padovan-numbers-15",
+       Command.basic ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4 ]" parse );
+     ( "pascals-triangle-15",
+       Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]" parse );
+     ("divisors-of-928-15", Command.basic ~summary:"[ 1; 2; 4; 8 ]" parse);
+     ( "fibonacci-triangle-15",
+       Command.basic ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]" parse );
+     ("fibonacci-numbers", Command.basic ~summary:"[ 1; 1; 2; 3; 5; 8 ]" parse);
+     ( "padovan-numbers-20",
+       Command.basic ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4; 5 ]" parse );
+     ( "pascals-triangle-20",
+       Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ]" parse );
+     ("a034298", Command.basic ~summary:"[ 1; 2; 3; 4; 6; 6; 8 ]" parse);
+     ( "partition-numbers",
+       Command.basic ~summary:"[ 1; 1; 2; 3; 5; 7; 11 ]" parse );
+     ( "pascals-triangle-30",
+       Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ]"
+         parse );
+     ( "fibonacci-triangle-30",
+       Command.basic ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]" parse
+     );
+     ("divisors-of-928-30", Command.basic ~summary:"[ 1; 2; 4; 8; 16 ]" parse);
+     ( "padovan-numbers-30",
+       Command.basic ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9 ]" parse );
+     ("divisors-of-928-60", Command.basic ~summary:"[ 1; 2; 4; 8; 16; 29 ]" parse);
+     ( "narayanas-cows",
+       Command.basic ~summary:"[ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]" parse );
+     ("a331072", Command.basic ~summary:"[ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]" parse);
+     ( "padovan-numbers-60",
+       Command.basic ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]" parse );
+   ] *)
 
-let padovan_numbers_15 =
-  let seq = [ 1; 1; 1; 1; 2; 2; 3; 4 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4 ]" (seq |> parse)
-
-let pascals_triangle_15 =
-  let seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]" (seq |> parse)
-
-let divisors_of_928_15 =
-  let seq = [ 1; 2; 4; 8 ] in
-  Command.basic ~summary:"[ 1; 2; 4; 8 ]" (seq |> parse)
-
-let fibonacci_triangle_15 =
-  let seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]" (seq |> parse)
-
-let fibonacci_numbers =
-  let seq = [ 1; 1; 2; 3; 5; 8 ] in
-  Command.basic ~summary:"[ 1; 1; 2; 3; 5; 8 ]" (seq |> parse)
-
-let padovan_numbers_20 =
-  let seq = [ 1; 1; 1; 1; 2; 2; 3; 4; 5 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4; 5 ]" (seq |> parse)
-
-let pascals_triangle_20 =
-  let seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ]" (seq |> parse)
-
-let a034298 =
-  let seq = [ 1; 2; 3; 4; 6; 6; 8 ] in
-  Command.basic ~summary:"[ 1; 2; 3; 4; 6; 6; 8 ]" (seq |> parse)
-
-let partition_numbers =
-  let seq = [ 1; 1; 2; 3; 5; 7; 11 ] in
-  Command.basic ~summary:"[ 1; 1; 2; 3; 5; 7; 11 ]" (seq |> parse)
-
-let pascals_triangle_30 =
-  let seq = [ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ]"
-    (seq |> parse)
-
-let fibonacci_triangle_30 =
-  let seq = [ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]"
-    (seq |> parse)
-
-let divisors_of_928_30 =
-  let seq = [ 1; 2; 4; 8; 16 ] in
-  Command.basic ~summary:"[ 1; 2; 4; 8; 16 ]" (seq |> parse)
-
-let padovan_numbers_30 =
-  let seq = [ 1; 2; 2; 3; 4; 5; 7; 9 ] in
-  Command.basic ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9 ]" (seq |> parse)
-
-let divisors_of_928_60 =
-  let seq = [ 1; 2; 4; 8; 16; 29 ] in
-  Command.basic ~summary:"[ 1; 2; 4; 8; 16; 29 ]" (seq |> parse)
-
-let narayanas_cows =
-  let seq = [ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ] in
-  Command.basic ~summary:"[ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]" (seq |> parse)
-
-let a331072 =
-  let seq = [ 1; 2; 3; 5; 6; 8; 9; 12; 14 ] in
-  Command.basic ~summary:"[ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]" (seq |> parse)
-
-let padovan_numbers_60 =
-  let seq = [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ] in
-  Command.basic ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]" (seq |> parse)
-
-(* let minutes =
-   Command.basic ~summary:"An hours/minutes clock"
-   ~readme:(fun () ->
-     "Takes a sequence name from the(string), a gap (int), and four 6-digit hex colors with leading # (off, minutes, hours, both)\nEx: A331072 5 #ffffff #00ff00 #ff0000 #0000ff")
-     (let%map_open.Command seq = anon ("sequence" %: string)
-      and gap = anon ("gap" %: int)
-      and colors = anon (sequence ("colors" %: string)) in
-      fun () ->
-        let () =
-          if
-            not (List.exists sequence_data ~f:(fun x -> String.( = ) x.name seq))
-          then failwith (seq ^ " is not a valid sequence option")
-        in
-        let () =
-          if gap < 0 then failwith "gap must be a positive integer or zero"
-        in
-        let () =
-          if Int.( <> ) (List.length colors) 4 then
-            failwith
-              "enter four 6-digit hex colors, with or without a leading '#'"
-        in
-        print_string seq;
-        Stdlib.print_int gap;
-        List.iter colors ~f:Stdlib.print_string) *)
-
-(* let seconds =
-   Command.basic ~summary:"A seconds clock"
-     ~readme:(fun () ->
-       "Takes a sequence, a gap, and two hex colors (off and on)")
-     (let%map_open.Command seq = anon ("sequence" %: string)
-      and gap = anon ("gap" %: int)
-      and colors = anon (sequence ("colors" %: string)) in
-      fun () ->
-        let () =
-          if
-            not (List.exists sequence_data ~f:(fun x -> String.( = ) x.name seq))
-          then failwith (seq ^ " is not a valid sequence option")
-        in
-        let () =
-          if gap < 0 then failwith "gap must be a positive integer or zero"
-        in
-        let () =
-          if Int.( <> ) (List.length colors) 2 then
-            failwith
-              "enter four 6-digit hex colors, with or without a leading '#'"
-        in
-        print_string seq;
-        Stdlib.print_int gap;
-        List.iter colors ~f:Stdlib.print_string) *)
-
-(* let both =
-   Command.basic ~summary:"An hours/minutes clock and a seconds clock"
-     ~readme:(fun () ->
-       "Takes two sequences, two gaps, the number of spaces to put between the \
-        clocks, and six hex colors")
-     (let%map_open.Command seqs = anon (t2 ("seq0" %: string) ("seq1" %: string))
-      and gaps = anon (t2 ("gap0" %: int) ("gap1" %: int))
-      and spaces = anon ("spaces" %: int)
-      and colors = anon (sequence ("colors" %: string)) and help = help
-      and path = path
-      and args = args in
-      fun () ->
-       print_string (Command.summary seconds);
-        print_string (fst seqs ^ snd seqs);
-        Stdlib.print_int (fst gaps + snd gaps + spaces);
-        Stdlib.print_int (Stdlib.List.length colors);
-        print_endline "PATH:";
-          List.iter path ~f:(fun x -> print_endline ("  " ^ x));
-          print_endline "ARGS:";
-          List.iter args ~f:(fun x -> print_endline ("  " ^ x));
-          print_endline "HELP!";
-          print_endline (Lazy.force help)) *)
-
-let coll =
-  Command.group ~summary:""
-    ~readme:(fun () -> "More detailed information444")
-    ~preserve_subcommand_order:()
-    [
-      ("semi-Fibonacci", semi_Fibonacci);
-      ("tetranacci-numbers", tetranacci_numbers);
-      ("tribonacci-numbers", tribonacci_numbers);
-      ("padovan-numbers-15", padovan_numbers_15);
-      ("pascals-triangle-15", pascals_triangle_15);
-      ("divisors-of-928-15", divisors_of_928_15);
-      ("fibonacci-triangle-15", fibonacci_triangle_15);
-      ("fibonacci-numbers", fibonacci_numbers);
-      ("padovan-numbers-20", padovan_numbers_20);
-      ("pascals-triangle-20", pascals_triangle_20);
-      ("a034298", a034298);
-      ("partition-numbers", partition_numbers);
-      ("pascals-triangle-30", pascals_triangle_30);
-      ("fibonacci-triangle-30", fibonacci_triangle_30);
-      ("divisors-of-928-30", divisors_of_928_30);
-      ("padovan-numbers-30", padovan_numbers_30);
-      ("divisors-of-928-60", divisors_of_928_60);
-      ("narayanas-cows", narayanas_cows);
-      ("a331072", a331072);
-      ("padovan-numbers-60", padovan_numbers_60);
-    ]
-
-let both =
-  Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information333")
-    ~preserve_subcommand_order:()
-    [
-      ("semi-Fibonacci", coll);
-      ("tetranacci-numbers", coll);
-      ("tribonacci-numbers", coll);
-      ("padovan-numbers-15", coll);
-      ("pascals-triangle-15", coll);
-      ("divisors-of-928-15", coll);
-      ("fibonacci-triangle-15", coll);
-      ("fibonacci-numbers", coll);
-      ("padovan-numbers-20", coll);
-      ("pascals-triangle-20", coll);
-      ("a034298", coll);
-      ("partition-numbers", coll);
-      ("pascals-triangle-30", coll);
-      ("fibonacci-triangle-30", coll);
-      ("divisors-of-928-30", coll);
-      ("padovan-numbers-30", coll);
-      ("divisors-of-928-60", coll);
-      ("narayanas-cows", coll);
-      ("a331072", coll);
-      ("padovan-numbers-60", coll);
-    ]
-
-(* let minutes =
-   Command.group ~summary:"\nA Fibonacci clock for polybar"
-     ~readme:(fun () -> "More detailed information222")
-     ~preserve_subcommand_order:()
-     [
-       ("semi-Fibonacci", semi_Fibonacci);
-       ("tetranacci-numbers", tetranacci_numbers);
-       ("tribonacci-numbers", tribonacci_numbers);
-       ("padovan-numbers-15", padovan_numbers_15);
-       ("pascals-triangle-15", pascals_triangle_15);
-       ("divisors-of-928-15", divisors_of_928_15);
-       ("fibonacci-triangle-15", fibonacci_triangle_15);
-       ("fibonacci-numbers", fibonacci_numbers);
-       ("padovan-numbers-20", padovan_numbers_20);
-       ("pascals-triangle-20", pascals_triangle_20);
-       ("a034298", a034298);
-       ("partition-numbers", partition_numbers);
-       ("pascals-triangle-30", pascals_triangle_30);
-       ("fibonacci-triangle-30", fibonacci_triangle_30);
-       ("divisors-of-928-30", divisors_of_928_30);
-       ("padovan-numbers-30", padovan_numbers_30);
-       ("divisors-of-928-60", divisors_of_928_60);
-       ("narayanas-cows", narayanas_cows);
-       ("a331072", a331072);
-       ("padovan-numbers-60", padovan_numbers_60);
-     ] *)
-
-let one =
-  Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information111")
-    ~preserve_subcommand_order:()
-    [
-      ("semi-Fibonacci", semi_Fibonacci);
-      ("tetranacci-numbers", tetranacci_numbers);
-      ("tribonacci-numbers", tribonacci_numbers);
-      ("padovan-numbers-15", padovan_numbers_15);
-      ("pascals-triangle-15", pascals_triangle_15);
-      ("divisors-of-928-15", divisors_of_928_15);
-      ("fibonacci-triangle-15", fibonacci_triangle_15);
-      ("fibonacci-numbers", fibonacci_numbers);
-      ("padovan-numbers-20", padovan_numbers_20);
-      ("pascals-triangle-20", pascals_triangle_20);
-      ("a034298", a034298);
-      ("partition-numbers", partition_numbers);
-      ("pascals-triangle-30", pascals_triangle_30);
-      ("fibonacci-triangle-30", fibonacci_triangle_30);
-      ("divisors-of-928-30", divisors_of_928_30);
-      ("padovan-numbers-30", padovan_numbers_30);
-      ("divisors-of-928-60", divisors_of_928_60);
-      ("narayanas-cows", narayanas_cows);
-      ("a331072", a331072);
-      ("padovan-numbers-60", padovan_numbers_60);
-    ]
-
-let command =
-  Command.group ~summary:"\nA Fibonacci clock for polybar"
-    ~readme:(fun () -> "More detailed information000")
-    ~preserve_subcommand_order:()
-    [ ("one", one); ("both", both) ]
+(* [
+     ("semi-fibonacci", sub_seq);
+     ("tetranacci-numbers", sub_seq);
+     ("tribonacci-numbers", sub_seq);
+     ("padovan-numbers-15", sub_seq);
+     ("pascals-triangle-15", sub_seq);
+     ("divisors-of-928-15", sub_seq);
+     ("fibonacci-triangle-15", sub_seq);
+     ("fibonacci-numbers", sub_seq);
+     ("padovan-numbers-20", sub_seq);
+     ("pascals-triangle-20", sub_seq);
+     ("a034298", sub_seq);
+     ("partition-numbers", sub_seq);
+     ("pascals-triangle-30", sub_seq);
+     ("fibonacci-triangle-30", sub_seq);
+     ("divisors-of-928-30", sub_seq);
+     ("padovan-numbers-30", sub_seq);
+     ("divisors-of-928-60", sub_seq);
+     ("narayanas-cows", sub_seq);
+     ("a331072", sub_seq);
+     ("padovan-numbers-60", sub_seq);
+   ] *)
 
 (* let command =
    Command.basic ~summary:"fib clock"
@@ -415,9 +187,7 @@ let command =
                 let space =
                   match space_between with Some sb -> sb | None -> 4
                 in
-                Fibonacci_clock.Time.main ~space
+                fibonacci_clock.Time.main ~space
                   [ (min_seq, min_acc, min_gap); (sec_seq, sec_acc, sec_gap) ]
-            | None -> Fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ]
+            | None -> fibonacci_clock.Time.main [ (min_seq, min_acc, min_gap) ]
                   ) *)
-
-let () = Command_unix.run ~version:"1.0" ~build_info:"RWO" command
