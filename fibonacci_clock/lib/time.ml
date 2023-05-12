@@ -26,4 +26,10 @@ let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
    else "" *)
 
 
-let main ?(space = 0) (layouts:(int list * int * int) list) = print_int space; let _,k,_ = List.hd layouts in print_int k
+let main l:Fibonacci_clock.Main.layout= match l with | Seconds c -> print_int c.accuracy
+   |Minutes ->
+      |Both -> 
+
+
+
+
