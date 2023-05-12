@@ -24,10 +24,19 @@ let sequence_data =
     ("padovan-numbers-60", [ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]);
   ]
 
-(* let check_color_list = function
-    | [ _; _ ]
-    | [ _; _;_;_ ] as a -> List.map a ~f:(fun x -> if String.is_prefix x ~prefix:"#" then x else "#" ^ x)
-    | [ _ ] | _ -> failwith "invalid input" *)
+ 
+
+  type color_list =
+  | Two of string*string
+  | Four of string*string* string*string
+  |  Six of string*string* string*string* string*string
+
+  type layout = 
+  | Seconds of int list * int * int * color_list
+  | Minutes of int list * int * int * color_list
+  | Both
+
+
 
 let parse =
   let%map_open.Command path = path
@@ -51,7 +60,14 @@ let parse =
         Stdlib.print_int gap0;
         Stdlib.print_int gap1;
         Stdlib.print_int spaces;
-        Stdlib.print_int (Stdlib.List.length colors)
+        let err = failwith "enter 6-digit hex colors w/wo leading '#'" in
+        Stdlib.print_int
+          (Stdlib.List.length
+             (List.map colors ~f:(fun x ->
+                  if String.is_prefix x ~prefix:"#" then
+                    if String.length x = 7 then x else err
+                  else if String.length x = 6 then "#" ^ x
+                  else err)))
     | "one", 4 ->
         let gap1 = 0 and spaces = 0 in
         Stdlib.print_int gap0;
@@ -63,6 +79,8 @@ let parse =
         Stdlib.print_int gap1;
         Stdlib.print_int spaces;
         Stdlib.print_int (Stdlib.List.length colors)
+    | "one", _ -> failwith "invalid input - enter 2 or 4 colors"
+    | "both", _ -> failwith "invalid input - enter 6 colors"
     | _ -> failwith "invalid input"
 
 let subcommand_list =
