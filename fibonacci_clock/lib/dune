@@ -1,3 +1,5 @@
 (library
  (name fibonacci_clock)
- (libraries unix))
+ (libraries core core_unix)
+ (preprocess
+  (pps ppx_jane)))

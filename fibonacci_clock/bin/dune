@@ -1,5 +1,5 @@
 (executable
  (public_name fibonacci_clock)
  (name main)
- (libraries core core_unix.command_unix fibonacci_clock unix)
+ (libraries core core_unix.command_unix fibonacci_clock)
  (preprocess (pps ppx_jane)))

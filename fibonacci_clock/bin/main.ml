@@ -67,8 +67,11 @@ let parse =
             spaces,
             { seq = seq1; gap = gap1; acc = acc1; colors = sec_colors } )
         |> main
-    | "one", _ -> failwith "invalid input - enter 2 or 4 colors"
-    | "both", _ -> failwith "invalid input - enter 6 colors"
+    | "one", _ ->
+        failwith
+          "invalid input - enter 2 or 4 colors. Escape # or quote each color."
+    | "both", _ ->
+        failwith "invalid input - enter 6 colors. Escape # or quote each color."
     | _ -> failwith "invalid input"
 
 let subcommand_list =
@@ -80,6 +83,11 @@ let subcommand_list =
                (fst (snd x))
                ~init:""
                ~f:(fun acc y -> acc ^ string_of_int y ^ " "))
+          ~readme:(fun () ->
+            "Enter colors with leading # and escape with \\ or enclose in \
+             quotes to prevent shell interpretation. Enter two colors for \
+             seconds (off, on), four for minutes (off, hours, minutes, both), \
+             or six for both (minutes, seconds).")
           parse ))
 
 let get_group sum rdme lst =
@@ -87,26 +95,19 @@ let get_group sum rdme lst =
     ~readme:(fun () -> rdme)
     ~preserve_subcommand_order:() lst
 
-(* The first number in each sequence is the sum of the sequence and determines how many shade characters will be used to show 1-period accuracy on the clock. *)
-
 let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
-    (get_group "A Fibonacci clock for polybar"
-       "Get help with the -help flag. Enter colors with leading # and escape \
-        with \\ or enclose in quotes to prevent shell interpretation."
+    (get_group "A Fibonacci clock for polybar" "Choose one clock or two."
        [
          ( "one",
-           get_group "One clock: minutes or seconds"
-             "Enter two colors for seconds or four for minutes. Example: one \
-              a331072 -g 4 '#000000' '#dddddd'"
+           get_group "One clock: minutes or seconds" "Choose a sequence."
              subcommand_list );
          ( "both",
            get_group "Two clocks: minutes and seconds"
-             "Enter six colors; four for minutes and two for seconds. Example: \
-              both a331072 semi-fibonacci -g 4 -gg 4 -s 3 '#000000' '#dddddd' \
-              '#ff0000' '#0000ff' '#111111' '#fefefe'"
+             "Choose a sequence for the minutes clock."
              (List.map sequence_data ~f:(fun x ->
                   ( fst x,
-                    get_group "See help under the 'one' subcommand"
-                      "More detailed information444" subcommand_list ))) );
+                    get_group "First clock: minutes"
+                      "Choose a sequence for the seconds clock." subcommand_list
+                  ))) );
        ])

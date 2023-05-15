@@ -1,3 +1,6 @@
+open Core
+module Unix = Core_unix
+
 let get_hour hr =
   match (hr < 13, hr = 0) with
   | true, true -> 12
@@ -22,6 +25,7 @@ let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
 (* let rec repeat_str str n =
    if n > -1 then match n with 0 -> "" | _ -> str ^ repeat_str str (n - 1)
    else "" *)
+
 type clock = { seq : int list; gap : int; acc : int; colors : string list }
 
 type layout =
@@ -31,7 +35,10 @@ type layout =
 
 let main = function
   | Seconds c -> print_int c.acc
-  | Minutes c -> print_int c.acc
+  | Minutes c ->
+     (* List.map (Layout.get_layout (hour |> get_hour) min c.seq); *)
+    
+    print_int c.acc
   | Both (a, b, c) ->
       print_int a.acc;
       print_int b;
