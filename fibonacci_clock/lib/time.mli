@@ -1,9 +1,9 @@
-module Unix = Core_unix
-
-val get_hour : int -> int
+val to_hour : int -> int
+val to_min : int -> int -> int
 val sec : int
 val min : int
 val hour : int
+val blocks : string list
 val repeat : string -> int -> string
 
 type clock = {
