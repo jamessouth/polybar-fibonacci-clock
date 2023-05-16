@@ -14,17 +14,11 @@ let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
 
 (* +(4-(60/x)) *)
 
-(* let rec take n l =
-   if n = 0 then []
-   else match l with [] -> [] | hd :: tl -> hd :: take (n - 1) tl *)
-
 (* let rec flatten_pairs = function
    | [] -> []
    | (a, b) :: tl -> (a ^ b) :: flatten_pairs tl *)
 
-(* let rec repeat_str str n =
-   if n > -1 then match n with 0 -> "" | _ -> str ^ repeat_str str (n - 1)
-   else "" *)
+let repeat s n = String.concat (List.init n ~f:(fun _ -> s))
 
 type clock = { seq : int list; gap : int; acc : int; colors : string list }
 
@@ -34,12 +28,11 @@ type layout =
   | Both of clock * int * clock
 
 let main = function
-  | Seconds c -> print_int c.acc
+  | Seconds c -> Stdlib.print_int c.acc
   | Minutes c ->
-     (* List.map (Layout.get_layout (hour |> get_hour) min c.seq); *)
-    
-    print_int c.acc
+    Stdlib.print_int hour; Stdlib.print_int min;
+      Layout.pint (List.map ~f:(fun (col, num) -> (List.nth_exn c.colors col) ^ (repeat "g" num)) (Layout.get_layout (hour |> get_hour) 9 c.seq))
   | Both (a, b, c) ->
-      print_int a.acc;
-      print_int b;
-      print_int c.acc
+      Stdlib.print_int a.acc;
+      Stdlib.print_int b;
+      Stdlib.print_int c.acc
