@@ -18,4 +18,4 @@ type layout =
   | Minutes of clock
   | Both of clock * int * clock
 
-val main : layout -> unit
+val main : layout -> string

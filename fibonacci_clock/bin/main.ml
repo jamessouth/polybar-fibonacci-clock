@@ -40,8 +40,7 @@ let parse =
 
   fun () ->
     let open Fibonacci_clock.Time in
-    List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " "));
-
+    (* List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " ")); *)
     let seq_name = List.nth_exn path 2 in
     let seq_find =
       List.Assoc.find_exn sequence_data ~equal:String.( = ) seq_name

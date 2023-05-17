@@ -29,18 +29,23 @@ type layout =
   | Minutes of clock
   | Both of clock * int * clock
 
-let main = function
-  | Seconds c -> Stdlib.print_int c.acc
+
+
+  
+  let main = function
+  | Seconds c -> Stdlib.print_int c.acc;""
   | Minutes c ->
-      Stdlib.print_int hour;
-      Stdlib.print_int min;
-      Layout.pint
+    let g = "%{O" ^ string_of_int c.gap ^ "}" in
+      (* Stdlib.print_int hour;
+         Stdlib.print_int min; *)
+      (* Stdlib.print_endline  *)
+      (String.concat ~sep:g
         (List.map
-           ~f:(fun (col, num) ->
-             List.nth_exn c.colors col
-             ^ repeat (List.nth_exn blocks (min / c.acc)) num)
-           (Layout.get_layout (to_hour hour) (to_min min c.acc) c.seq))
+           (Layout.get_layout (to_hour hour) (to_min min c.acc) c.seq)
+           ~f:(fun (col, num) -> "%{F" ^ 
+             (List.nth_exn c.colors col) ^ "}"
+             ^ repeat (List.nth_exn blocks (min / c.acc)) num))) 
   | Both (a, b, c) ->
       Stdlib.print_int a.acc;
       Stdlib.print_int b;
-      Stdlib.print_int c.acc
+      Stdlib.print_int c.acc;""
