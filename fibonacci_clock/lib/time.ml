@@ -12,7 +12,7 @@ let to_min min acc = min - (acc * (min / acc))
 let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
   Unix.localtime (Unix.time ())
 
-let blocks = [ "░"; "▒"; "▓"; "█" ]
+let blocks = [ "▂"; "▄"; "▆"; "█" ]
 
 (* +(4-(60/x)) *)
 
@@ -29,23 +29,20 @@ type layout =
   | Minutes of clock
   | Both of clock * int * clock
 
-
-
-  
-  let main = function
-  | Seconds c -> Stdlib.print_int c.acc;""
+let main = function
+  | Seconds c -> Stdlib.print_int c.acc
   | Minutes c ->
-    let g = "%{O" ^ string_of_int c.gap ^ "}" in
+      let g = "%{O" ^ string_of_int c.gap ^ "}" in
       (* Stdlib.print_int hour;
          Stdlib.print_int min; *)
-      (* Stdlib.print_endline  *)
-      (String.concat ~sep:g
-        (List.map
-           (Layout.get_layout (to_hour hour) (to_min min c.acc) c.seq)
-           ~f:(fun (col, num) -> "%{F" ^ 
-             (List.nth_exn c.colors col) ^ "}"
-             ^ repeat (List.nth_exn blocks (min / c.acc)) num))) 
+      Stdlib.print_string
+        (String.concat ~sep:g
+           (List.map
+              (Layout.get_layout (to_hour hour) (to_min min c.acc) c.seq)
+              ~f:(fun (col, num) ->
+                "%{F" ^ List.nth_exn c.colors col ^ "}"
+                ^ repeat (List.nth_exn blocks (min / c.acc)) num)))
   | Both (a, b, c) ->
       Stdlib.print_int a.acc;
       Stdlib.print_int b;
-      Stdlib.print_int c.acc;""
+      Stdlib.print_int c.acc
