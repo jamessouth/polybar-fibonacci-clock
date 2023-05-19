@@ -35,8 +35,8 @@ let main = function
       let g = "%{O" ^ string_of_int c.gap ^ "}" in
       (* Stdlib.print_int hour;
          Stdlib.print_int min; *)
-      Stdlib.print_string
-        (String.concat ~sep:g
+      Stdlib.print_string ("%{o#ff9900}%{+o}%{u#ff9900}%{+u}" ^
+        String.concat ~sep:g
            (List.map
               (Layout.get_layout (to_hour hour) (to_min min c.acc) c.seq)
               ~f:(fun (col, num) ->

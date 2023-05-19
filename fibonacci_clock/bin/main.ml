@@ -73,7 +73,102 @@ let parse =
         failwith "invalid input - enter 6 colors. Escape # or quote each color."
     | _ -> failwith "invalid input"
 
-let subcommand_list =
+
+    
+    
+    let lines =
+      Command.basic ~summary:"under over lines" ~readme:(fun () ->
+        "Enter colors with leading # and escape with \\ or enclose in \
+        quotes to prevent shell interpretation. For one clock, enter two \
+        colors for seconds (off, on) or four for minutes (off, hours, \
+        minutes, both). For both clocks, enter six colors (minutes, \
+        seconds).") parse
+        let semi_fibonacci =
+             Command.group ~summary:"[ 1; 1; 2; 1; 3; 2; 5 ]"
+             ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+
+
+             let tetranacci_numbers =
+              Command.group ~summary:"[ 1; 1; 1; 1; 4; 7 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let tribonacci_numbers =
+              Command.group ~summary:"[ 1; 1; 2; 4; 7 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let padovan_numbers_15 =
+              Command.group ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let pascals_triangle_15 =
+              Command.group ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let divisors_of_928_15 =
+              Command.group ~summary:"[ 1; 2; 4; 8 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let fibonacci_triangle_15 =
+              Command.group ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let fibonacci_numbers =
+              Command.group ~summary:"[ 1; 1; 2; 3; 5; 8 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let padovan_numbers_20 =
+              Command.group ~summary:"[ 1; 1; 1; 1; 2; 2; 3; 4; 5 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let pascals_triangle_20 =
+              Command.group ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let a034298 =
+              Command.group ~summary:"[ 1; 2; 3; 4; 6; 6; 8 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let partition_numbers =
+              Command.group ~summary:"[ 1; 1; 2; 3; 5; 7; 11 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let pascals_triangle_30 =
+              Command.group ~summary:"[ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ]"
+                ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let fibonacci_triangle_30 =
+              Command.group ~summary:"[ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ]"
+                ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let divisors_of_928_30 =
+              Command.group ~summary:"[ 1; 2; 4; 8; 16 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let padovan_numbers_30 =
+              Command.group ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let divisors_of_928_60 =
+              Command.group ~summary:"[ 1; 2; 4; 8; 16; 29 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let narayanas_cows =
+              Command.group ~summary:"[ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let a331072 =
+              Command.group ~summary:"[ 1; 2; 3; 5; 6; 8; 9; 12; 14 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+            
+            let padovan_numbers_60 =
+              Command.group ~summary:"[ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ]" ~readme:(fun () -> "Choose an accuracy mode." )
+             ~preserve_subcommand_order:() ["lines",lines]
+
+
+(* let subcommand_list =
   List.map sequence_data ~f:(fun x ->
       ( fst x,
         Command.basic
@@ -84,10 +179,11 @@ let subcommand_list =
                ~f:(fun acc y -> acc ^ string_of_int y ^ " "))
           ~readme:(fun () ->
             "Enter colors with leading # and escape with \\ or enclose in \
-             quotes to prevent shell interpretation. Enter two colors for \
-             seconds (off, on), four for minutes (off, hours, minutes, both), \
-             or six for both (minutes, seconds).")
-          parse ))
+             quotes to prevent shell interpretation. For one clock, enter two \
+             colors for seconds (off, on) or four for minutes (off, hours, \
+             minutes, both). For both clocks, enter six colors (minutes, \
+             seconds).")
+          parse )) *)
 
 let get_group sum rdme lst =
   Command.group ~summary:sum
@@ -100,13 +196,64 @@ let () =
        [
          ( "one",
            get_group "One clock: minutes or seconds" "Choose a sequence."
-             subcommand_list );
-         ( "both",
+           [
+            ("semi-fibonacci", semi_fibonacci);
+            ("tetranacci-numbers", tetranacci_numbers);
+            ("tribonacci-numbers", tribonacci_numbers);
+            ("padovan-numbers-15", padovan_numbers_15);
+            ("pascals-triangle-15", pascals_triangle_15);
+            ("divisors-of-928-15", divisors_of_928_15);
+            ("fibonacci-triangle-15", fibonacci_triangle_15);
+            ("fibonacci-numbers", fibonacci_numbers);
+            ("padovan-numbers-20", padovan_numbers_20);
+            ("pascals-triangle-20", pascals_triangle_20);
+            ("a034298", a034298);
+            ("partition-numbers", partition_numbers);
+            ("pascals-triangle-30", pascals_triangle_30);
+            ("fibonacci-triangle-30", fibonacci_triangle_30);
+            ("divisors-of-928-30", divisors_of_928_30);
+            ("padovan-numbers-30", padovan_numbers_30);
+            ("divisors-of-928-60", divisors_of_928_60);
+            ("narayanas-cows", narayanas_cows);
+            ("a331072", a331072);
+            ("padovan-numbers-60", padovan_numbers_60);
+          ]);
+               ( "both",
            get_group "Two clocks: minutes and seconds"
              "Choose a sequence for the minutes clock."
              (List.map sequence_data ~f:(fun x ->
                   ( fst x,
-                    get_group "First clock: minutes"
-                      "Choose a sequence for the seconds clock." subcommand_list
+                  get_group "First clock: minutes"
+                  "Choose a sequence for the seconds clock." [
+                    ("semi-fibonacci", semi_fibonacci);
+                    ("tetranacci-numbers", tetranacci_numbers);
+                    ("tribonacci-numbers", tribonacci_numbers);
+                    ("padovan-numbers-15", padovan_numbers_15);
+                    ("pascals-triangle-15", pascals_triangle_15);
+                    ("divisors-of-928-15", divisors_of_928_15);
+                    ("fibonacci-triangle-15", fibonacci_triangle_15);
+                    ("fibonacci-numbers", fibonacci_numbers);
+                    ("padovan-numbers-20", padovan_numbers_20);
+                    ("pascals-triangle-20", pascals_triangle_20);
+                    ("a034298", a034298);
+                    ("partition-numbers", partition_numbers);
+                    ("pascals-triangle-30", pascals_triangle_30);
+                    ("fibonacci-triangle-30", fibonacci_triangle_30);
+                    ("divisors-of-928-30", divisors_of_928_30);
+                    ("padovan-numbers-30", padovan_numbers_30);
+                    ("divisors-of-928-60", divisors_of_928_60);
+                    ("narayanas-cows", narayanas_cows);
+                    ("a331072", a331072);
+                    ("padovan-numbers-60", padovan_numbers_60);
+                  ]
                   ))) );
-       ])
+                  ])
+                  
+                  (* get_group "One clock: minutes or seconds" 
+                  subcommand_list *)
+                  
+                  (* "Choose an accuracy mode." *)
+                  (* ("lines", get_group "Over- and underlines" "aa" ["semi-fibonacci",semi_fibonacci]);
+                  ("bars", get_group "Partial bar characters" "bb" ["semi-fibonacci",semi_fibonacci]); *)
+                  (* ("text", get_group "Text" "cc" subcommand_list);
+                  ("invert", get_group "Invert fg/bg colors" "cc" subcommand_list); *)
