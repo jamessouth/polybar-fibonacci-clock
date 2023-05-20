@@ -1,7 +1,7 @@
 open Core
 
 (* (name * [accuracy ; sequence]) *)
-(* let sequence_data =
+let sequence_data =
   [
     ("semi-fibonacci", ([ 1; 1; 2; 1; 3; 2; 5 ], 15));
     ("tetranacci-numbers", ([ 1; 1; 1; 1; 4; 7 ], 15));
@@ -23,7 +23,7 @@ open Core
     ("narayanas-cows", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], 60));
     ("a331072", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], 60));
     ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], 60));
-  ] *)
+  ]
 
 (* let parse =
   let%map_open.Command path = path
@@ -207,23 +207,27 @@ open Core
           parse )) *)
 
 
-          let fa = let open Command.Param in let flag_oneboth a =
+          (* let numdocs = [("num-one","oneeeee");("num-both","botttttt")]
+
+          let number = let open Command.Param in let flag_oneboth a =
               let name = sprintf "-%s" a in
-              let doc = sprintf " %s num clocks" a in
+              let doc = sprintf " %s num clocks %s" a (List.Assoc.find_exn numdocs ~equal:String.(=) a) in
               flag ~full_flag_required:() name no_arg ~doc
               |> map ~f:(function
                 | false -> None
                 | true -> Some a)
           in choose_one [
-            flag_oneboth "one";
-            flag_oneboth "both";
+            flag_oneboth "num-one";
+            flag_oneboth "num-both";
             ] ~if_nothing_chosen:Raise
 
-          let fa2 = let open Command.Param 
+              let accdocs = [("acc-bars","zzzzz");("acc-invert","xxxxxx");("acc-lines","ccccc");("acc-text","vvvvvv")] *)
+
+          (* let accuracy = let open Command.Param 
 
               in let flag_accmode a =
                 let name = sprintf "-%s" a in
-                let doc = sprintf " %s acc mode" a in
+                let doc = sprintf " %s acc mode %s" a (List.Assoc.find_exn accdocs ~equal:String.(=) a) in
                 flag ~full_flag_required:() name no_arg ~doc
                 |> map ~f:(function
                   | false -> None
@@ -231,12 +235,45 @@ open Core
 
           in choose_one [
      
-            flag_accmode "lines";
-            flag_accmode "bars";
-            flag_accmode "text";
-            flag_accmode "invert";
+            flag_accmode "acc-bars";
+            flag_accmode "acc-invert";
+            flag_accmode "acc-lines";
+            flag_accmode "acc-text";
 
-            ] ~if_nothing_chosen:Raise
+            ] ~if_nothing_chosen:Raise *)
+
+
+
+
+
+
+              let seqdocs = [("acc-bars","zzzzz");("acc-invert","xxxxxx");("acc-lines","ccccc");("acc-text","vvvvvv")]
+
+          let sequence = let open Command.Param 
+
+              in let flag_seq a =
+                let name = sprintf "-%s" a in
+                let doc = sprintf " %s acc mode %s" a (List.Assoc.find_exn seqdocs ~equal:String.(=) a) in
+                flag ~full_flag_required:() name no_arg ~doc
+                |> map ~f:(function
+                  | false -> None
+                  | true -> Some a)
+
+          in choose_one [flag_seq "seq-semi-fibonacci"; flag_seq "seq-tetranacci-numbers";
+          flag_seq "seq-tribonacci-numbers";
+          flag_seq "seq-padovan-numbers-15";
+          flag_seq "seq-pascals-triangle-15";
+          flag_seq "seq-divisors-of-928-15";
+          flag_seq "seq-fibonacci-triangle-15";
+          flag_seq "seq-fibonacci-numbers"; flag_seq "seq-padovan-numbers-20";
+          flag_seq "seq-pascals-triangle-20"; flag_seq "seq-a034298";
+          flag_seq "seq-partition-numbers";
+          flag_seq "seq-pascals-triangle-30";
+          flag_seq "seq-fibonacci-triangle-30";
+          flag_seq "seq-divisors-of-928-30";
+          flag_seq "seq-padovan-numbers-30";
+          flag_seq "seq-divisors-of-928-60"; flag_seq "seq-narayanas-cows";
+          flag_seq "seq-a331072"; flag_seq "seq-padovan-numbers-60"] ~if_nothing_chosen:Raise
 
         
 
@@ -244,19 +281,19 @@ open Core
 
 
 
-let () =
+(* let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
   (Command.basic
   ~summary:"fib clock"
   ~readme:(fun () -> "aosihaiu")
   (let%map_open.Command 
-  acts = fa and
-  acts2 = fa2 in
+  num = number and
+  acc = accuracy in
     fun () -> 
-      Stdlib.print_endline acts;
-      Stdlib.print_endline acts2
+      Stdlib.print_endline num;
+      Stdlib.print_endline acc
       
-      ))
+      )) *)
 
 
 
