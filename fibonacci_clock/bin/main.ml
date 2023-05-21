@@ -1,365 +1,190 @@
 open Core
 
 (* (name * [accuracy ; sequence]) *)
-let sequence_data =
+(* let sequence_data =
+   [
+     ("semi-fibonacci", ([ 1; 1; 2; 1; 3; 2; 5 ], 15));
+     ("tetranacci-numbers", ([ 1; 1; 1; 1; 4; 7 ], 15));
+     ("tribonacci-numbers", ([ 1; 1; 2; 4; 7 ], 15));
+     ("padovan-numbers-15", ([ 1; 1; 1; 1; 2; 2; 3; 4 ], 15));
+     ("pascals-triangle-15", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], 15));
+     ("divisors-of-928-15", ([ 1; 2; 4; 8 ], 15));
+     ("fibonacci-triangle-15", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], 15));
+     ("fibonacci-numbers", ([ 1; 1; 2; 3; 5; 8 ], 20));
+     ("padovan-numbers-20", ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], 20));
+     ("pascals-triangle-20", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], 20));
+     ("a034298", ([ 1; 2; 3; 4; 6; 6; 8 ], 30));
+     ("partition-numbers", ([ 1; 1; 2; 3; 5; 7; 11 ], 30));
+     ("pascals-triangle-30", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], 30));
+     ("fibonacci-triangle-30", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], 30));
+     ("divisors-of-928-30", ([ 1; 2; 4; 8; 16 ], 30));
+     ("padovan-numbers-30", ([ 1; 2; 2; 3; 4; 5; 7; 9 ], 30));
+     ("divisors-of-928-60", ([ 1; 2; 4; 8; 16; 29 ], 60));
+     ("narayanas-cows", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], 60));
+     ("a331072", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], 60));
+     ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], 60));
+   ] *)
+
+(* let numdocs = [ ("one", "oneeeee"); ("both", "botttttt") ] *)
+
+let accdocs =
   [
-    ("semi-fibonacci", ([ 1; 1; 2; 1; 3; 2; 5 ], 15));
-    ("tetranacci-numbers", ([ 1; 1; 1; 1; 4; 7 ], 15));
-    ("tribonacci-numbers", ([ 1; 1; 2; 4; 7 ], 15));
-    ("padovan-numbers-15", ([ 1; 1; 1; 1; 2; 2; 3; 4 ], 15));
-    ("pascals-triangle-15", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], 15));
-    ("divisors-of-928-15", ([ 1; 2; 4; 8 ], 15));
-    ("fibonacci-triangle-15", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], 15));
-    ("fibonacci-numbers", ([ 1; 1; 2; 3; 5; 8 ], 20));
-    ("padovan-numbers-20", ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], 20));
-    ("pascals-triangle-20", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], 20));
-    ("a034298", ([ 1; 2; 3; 4; 6; 6; 8 ], 30));
-    ("partition-numbers", ([ 1; 1; 2; 3; 5; 7; 11 ], 30));
-    ("pascals-triangle-30", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], 30));
-    ("fibonacci-triangle-30", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], 30));
-    ("divisors-of-928-30", ([ 1; 2; 4; 8; 16 ], 30));
-    ("padovan-numbers-30", ([ 1; 2; 2; 3; 4; 5; 7; 9 ], 30));
-    ("divisors-of-928-60", ([ 1; 2; 4; 8; 16; 29 ], 60));
-    ("narayanas-cows", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], 60));
-    ("a331072", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], 60));
-    ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], 60));
+    ("bars", "zzzzz");
+    ("invert", "xxxxxx");
+    ("lines", "ccccc");
+    ("text", "vvvvvv");
   ]
 
-(* let parse =
-  let%map_open.Command path = path
-  and gap = flag "-g" (required int) ~doc:"int Gap for the first clock"
-  and gap1 =
-    flag "-gg"
-      (optional_with_default 4 int)
-      ~doc:"int Gap for optional second clock (default 4)"
-  and spaces =
-    flag "-s"
-      (optional_with_default 2 int)
-      ~doc:"int Spaces between clocks when using two (default 2)"
-  and colors = anon (sequence ("colors" %: string)) in
+(* let seqdocs =
+  [
+    ("semi-fibonacci", "1 1 2 1 3 2 5");
+    ("tetranacci-numbers", "1 1 1 1 4 7");
+    ("tribonacci-numbers", "1 1 2 4 7");
+    ("padovan-numbers-15", "1 1 1 1 2 2 3 4");
+    ("pascals-triangle-15", "1 1 1 1 2 1 1 3 3 1");
+    ("divisors-of-928-15", "1 2 4 8");
+    ("fib-triangle-15", "1 1 1 2 1 2 3 2 2");
+    ("fibonacci-numbers", "1 1 2 3 5 8");
+    ("padovan-numbers-20", "1 1 1 1 2 2 3 4 5");
+    ("pascals-triangle-20", "1 1 1 1 2 1 1 3 3 1 1 4");
+    ("a034298", "1 2 3 4 6 6 8");
+    ("partition-numbers", "1 1 2 3 5 7 11");
+    ("pascals-triangle-30", "1 1 1 1 2 1 1 3 3 1 1 4 6 4");
+    ("fib-triangle-30", "1 1 1 2 1 2 3 2 2 3 5 3 4");
+    ("divisors-of-928-30", "1 2 4 8 16");
+    ("padovan-numbers-30", "1 2 2 3 4 5 7 9");
+    ("divisors-of-928-60", "1 2 4 8 16 29");
+    ("narayanas-cows", "1 1 1 2 3 4 6 9 13 19");
+    ("a331072", "1 2 3 5 6 8 9 12 14");
+    ("padovan-numbers-60", "1 2 2 3 4 5 7 9 12 16");
+  ] *)
 
-  fun () ->
-    let open Fibonacci_clock.Time in
-    (* List.iter path ~f:(fun x -> Stdlib.print_string (x ^ " ")); *)
-    let seq_name = List.nth_exn path 2 in
-    let seq_find =
-      List.Assoc.find_exn sequence_data ~equal:String.( = ) seq_name
+  (* let flag_prog =
+    Command.Param.(
+      flag
+        "prog"
+        (required Filename_unix.arg_type)
+        ~doc:"filename executable with statically-defined probes")
+  ;; *)
+
+
+  type person = { name : string list; age : int }
+
+  let person_param  =
+  let%map_open.Command path = path and
+       name = flag "name" (one_or_more_as_list string) ~doc:"X name of the person"
+      and age  = flag "age"  (required int)    ~doc:"N how many years old"
+      in
+      List.iter path ~f:(fun y -> Stdlib.print_string (y ^ " "));
+
+      if List.length path > 1 then 
+      {name; age} else {name; age}
+    
+
+
+  (* let rle =
+    Command.Arg_type.of_map ~accept_unique_prefixes:true 
+      ~case_sensitive:false
+      ~list_values_in_help:true
+      (String.Map.of_alist_exn [("a","aaa");("b","bbb");("c","ccc")])
+
+
+
+  let regular_file =
+    Command.Arg_type.comma_separated 
+    ~allow_empty:false
+      ~strip_whitespace:false
+      ~unique_values:true
+      rle *)
+
+(* let number =
+  let open Command.Param in *)
+  (* let flag_num pre base = *)
+    (* let name = sprintf "-%s" pre^base in
+    let doc =
+      sprintf " %s num clocks %s" base
+        (List.Assoc.find_exn numdocs ~equal:String.( = ) base)
+    in *)
+    (* flag ~full_flag_required:() "name" person_param ~doc:"l" *)
+    (* |> map ~f:(function false -> None | true -> Some base) *)
+  (* in
+  let pre = "num-" in
+  choose_one
+    [flag_num pre "both"; flag_num pre "one" ]
+    ~if_nothing_chosen:Raise *)
+
+let accuracy =
+  let open Command.Param in
+  let flag_acc pre base =
+    let name = sprintf "-%s" pre^base in
+    let doc =
+      sprintf " %s acc mode %s" base
+        (List.Assoc.find_exn accdocs ~equal:String.( = ) base)
     in
-    let seq = fst seq_find in
-    let acc = snd seq_find in
-    let first = { seq; gap; acc; colors } in
+    flag ~full_flag_required:() name no_arg ~doc
+    |> map ~f:(function false -> None | true -> Some base)
+  in
+  let pre = "acc-" in
+  choose_one
+    [
+      flag_acc pre "bars";
+      flag_acc pre "invert";
+      flag_acc pre "lines";
+      flag_acc pre "text";
+    ]
+    ~if_nothing_chosen:Raise
 
-    match (List.nth_exn path 1, List.length colors) with
-    | "one", 2 -> Seconds first |> main
-    | "one", 4 -> Minutes first |> main
-    | "both", 6 ->
-        let seq_name1 = List.nth_exn path 3 in
-        let seq_find1 =
-          List.Assoc.find_exn sequence_data ~equal:String.( = ) seq_name1
-        in
-        let seq1 = fst seq_find1 in
-        let acc1 = snd seq_find in
-        let min_colors, sec_colors = List.split_n colors 4 in
+(* let seqs =
+  let open Command.Param in
+  let flag_seq pre base =
+    let name = sprintf "-%s" pre^base in
+    let doc =
+      sprintf " %s %s" base
+        (List.Assoc.find_exn seqdocs ~equal:String.( = ) base)
+    in
+    flag ~full_flag_required:() name no_arg ~doc
+    |> map ~f:(function false -> None | true -> Some base)
+  in
+  let pre = "seq-" in
+  choose_one
+    [
+      flag_seq pre "semi-fibonacci";
+      flag_seq pre "tetranacci-numbers";
+      flag_seq pre "tribonacci-numbers";
+      flag_seq pre "padovan-numbers-15";
+      flag_seq pre "pascals-triangle-15";
+      flag_seq pre "divisors-of-928-15";
+      flag_seq pre "fib-triangle-15";
+      flag_seq pre "fibonacci-numbers";
+      flag_seq pre "padovan-numbers-20";
+      flag_seq pre "pascals-triangle-20";
+      flag_seq pre "a034298";
+      flag_seq pre "partition-numbers";
+      flag_seq pre "pascals-triangle-30";
+      flag_seq pre "fib-triangle-30";
+      flag_seq pre "divisors-of-928-30";
+      flag_seq pre "padovan-numbers-30";
+      flag_seq pre "divisors-of-928-60";
+      flag_seq pre "narayanas-cows";
+      flag_seq pre "a331072";
+      flag_seq pre "padovan-numbers-60";
+    ]
+    ~if_nothing_chosen:Raise *)
 
-        Both
-          ( { first with colors = min_colors },
-            spaces,
-            { seq = seq1; gap = gap1; acc = acc1; colors = sec_colors } )
-        |> main
-    | "one", _ ->
-        failwith
-          "invalid input - enter 2 or 4 colors. Escape # or quote each color."
-    | "both", _ ->
-        failwith "invalid input - enter 6 colors. Escape # or quote each color."
-    | _ -> failwith "invalid input" *)
-
-
-    
-    
-    (* let lines =
-      Command.basic ~summary:"under over lines" ~readme:(fun () ->
-        "Enter colors with leading # and escape with \\ or enclose in \
-        quotes to prevent shell interpretation. For one clock, enter two \
-        colors for seconds (off, on) or four for minutes (off, hours, \
-        minutes, both). For both clocks, enter six colors (minutes, \
-        seconds).") parse
-    let bars =
-      Command.basic ~summary:"under over lines" ~readme:(fun () ->
-        "Enter colors with leading # and escape with \\ or enclose in \
-        quotes to prevent shell interpretation. For one clock, enter two \
-        colors for seconds (off, on) or four for minutes (off, hours, \
-        minutes, both). For both clocks, enter six colors (minutes, \
-        seconds).") parse
-    let text =
-      Command.basic ~summary:"under over lines" ~readme:(fun () ->
-        "Enter colors with leading # and escape with \\ or enclose in \
-        quotes to prevent shell interpretation. For one clock, enter two \
-        colors for seconds (off, on) or four for minutes (off, hours, \
-        minutes, both). For both clocks, enter six colors (minutes, \
-        seconds).") parse
-    let invert =
-      Command.basic ~summary:"under over lines" ~readme:(fun () ->
-        "Enter colors with leading # and escape with \\ or enclose in \
-        quotes to prevent shell interpretation. For one clock, enter two \
-        colors for seconds (off, on) or four for minutes (off, hours, \
-        minutes, both). For both clocks, enter six colors (minutes, \
-        seconds).") parse *)
-        (* let semi_fibonacci =
-             Command.group ~summary:"1 1 2 1 3 2 5"
-             ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-
-
-             let tetranacci_numbers =
-              Command.group ~summary:"1 1 1 1 4 7" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let tribonacci_numbers =
-              Command.group ~summary:"1 1 2 4 7" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let padovan_numbers_15 =
-              Command.group ~summary:"1 1 1 1 2 2 3 4" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let pascals_triangle_15 =
-              Command.group ~summary:"1 1 1 1 2 1 1 3 3 1" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let divisors_of_928_15 =
-              Command.group ~summary:"1 2 4 8" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let fibonacci_triangle_15 =
-              Command.group ~summary:"1 1 1 2 1 2 3 2 2" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let fibonacci_numbers =
-              Command.group ~summary:"1 1 2 3 5 8" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let padovan_numbers_20 =
-              Command.group ~summary:"1 1 1 1 2 2 3 4 5" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let pascals_triangle_20 =
-              Command.group ~summary:"1 1 1 1 2 1 1 3 3 1 1 4" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let a034298 =
-              Command.group ~summary:"1 2 3 4 6 6 8" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let partition_numbers =
-              Command.group ~summary:"1 1 2 3 5 7 11" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let pascals_triangle_30 =
-              Command.group ~summary:"1 1 1 1 2 1 1 3 3 1 1 4 6 4"
-                ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let fibonacci_triangle_30 =
-              Command.group ~summary:"1 1 1 2 1 2 3 2 2 3 5 3 4"
-                ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let divisors_of_928_30 =
-              Command.group ~summary:"1 2 4 8 16" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let padovan_numbers_30 =
-              Command.group ~summary:"1 2 2 3 4 5 7 9" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let divisors_of_928_60 =
-              Command.group ~summary:"1 2 4 8 16 29" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let narayanas_cows =
-              Command.group ~summary:"1 1 1 2 3 4 6 9 13 19" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let a331072 =
-              Command.group ~summary:"1 2 3 5 6 8 9 12 14" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)]
-            
-            let padovan_numbers_60 =
-              Command.group ~summary:"1 2 2 3 4 5 7 9 12 16" ~readme:(fun () -> "Choose an accuracy mode." )
-             ~preserve_subcommand_order:() [("lines",lines);("bars",bars);("text",text);("invert",invert)] *)
-
-
-(* let subcommand_list =
-  List.map sequence_data ~f:(fun x ->
-      ( fst x,
-        Command.basic
-          ~summary:
-            (List.fold
-               (fst (snd x))
-               ~init:""
-               ~f:(fun acc y -> acc ^ string_of_int y ^ " "))
-          ~readme:(fun () ->
-            "Enter colors with leading # and escape with \\ or enclose in \
-             quotes to prevent shell interpretation. For one clock, enter two \
-             colors for seconds (off, on) or four for minutes (off, hours, \
-             minutes, both). For both clocks, enter six colors (minutes, \
-             seconds).")
-          parse )) *)
-
-
-          (* let numdocs = [("num-one","oneeeee");("num-both","botttttt")]
-
-          let number = let open Command.Param in let flag_oneboth a =
-              let name = sprintf "-%s" a in
-              let doc = sprintf " %s num clocks %s" a (List.Assoc.find_exn numdocs ~equal:String.(=) a) in
-              flag ~full_flag_required:() name no_arg ~doc
-              |> map ~f:(function
-                | false -> None
-                | true -> Some a)
-          in choose_one [
-            flag_oneboth "num-one";
-            flag_oneboth "num-both";
-            ] ~if_nothing_chosen:Raise
-
-              let accdocs = [("acc-bars","zzzzz");("acc-invert","xxxxxx");("acc-lines","ccccc");("acc-text","vvvvvv")] *)
-
-          (* let accuracy = let open Command.Param 
-
-              in let flag_accmode a =
-                let name = sprintf "-%s" a in
-                let doc = sprintf " %s acc mode %s" a (List.Assoc.find_exn accdocs ~equal:String.(=) a) in
-                flag ~full_flag_required:() name no_arg ~doc
-                |> map ~f:(function
-                  | false -> None
-                  | true -> Some a)
-
-          in choose_one [
-     
-            flag_accmode "acc-bars";
-            flag_accmode "acc-invert";
-            flag_accmode "acc-lines";
-            flag_accmode "acc-text";
-
-            ] ~if_nothing_chosen:Raise *)
-
-
-
-
-
-
-              let seqdocs = [("acc-bars","zzzzz");("acc-invert","xxxxxx");("acc-lines","ccccc");("acc-text","vvvvvv")]
-
-          let sequence = let open Command.Param 
-
-              in let flag_seq a =
-                let name = sprintf "-%s" a in
-                let doc = sprintf " %s acc mode %s" a (List.Assoc.find_exn seqdocs ~equal:String.(=) a) in
-                flag ~full_flag_required:() name no_arg ~doc
-                |> map ~f:(function
-                  | false -> None
-                  | true -> Some a)
-
-          in choose_one [flag_seq "seq-semi-fibonacci"; flag_seq "seq-tetranacci-numbers";
-          flag_seq "seq-tribonacci-numbers";
-          flag_seq "seq-padovan-numbers-15";
-          flag_seq "seq-pascals-triangle-15";
-          flag_seq "seq-divisors-of-928-15";
-          flag_seq "seq-fibonacci-triangle-15";
-          flag_seq "seq-fibonacci-numbers"; flag_seq "seq-padovan-numbers-20";
-          flag_seq "seq-pascals-triangle-20"; flag_seq "seq-a034298";
-          flag_seq "seq-partition-numbers";
-          flag_seq "seq-pascals-triangle-30";
-          flag_seq "seq-fibonacci-triangle-30";
-          flag_seq "seq-divisors-of-928-30";
-          flag_seq "seq-padovan-numbers-30";
-          flag_seq "seq-divisors-of-928-60"; flag_seq "seq-narayanas-cows";
-          flag_seq "seq-a331072"; flag_seq "seq-padovan-numbers-60"] ~if_nothing_chosen:Raise
-
-        
-
-
-
-
-
-(* let () =
+let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
-  (Command.basic
-  ~summary:"fib clock"
-  ~readme:(fun () -> "aosihaiu")
-  (let%map_open.Command 
-  num = number and
-  acc = accuracy in
-    fun () -> 
-      Stdlib.print_endline num;
-      Stdlib.print_endline acc
-      
-      )) *)
-
-
-
-
-    (* (get_group "A Fibonacci clock for polybar" "Choose one clock or two."
-       [
-         ( "one",
-           get_group "One clock: minutes or seconds" "Choose a sequence."
-           [
-            ("semi-fibonacci", semi_fibonacci);
-            ("tetranacci-numbers", tetranacci_numbers);
-            ("tribonacci-numbers", tribonacci_numbers);
-            ("padovan-numbers-15", padovan_numbers_15);
-            ("pascals-triangle-15", pascals_triangle_15);
-            ("divisors-of-928-15", divisors_of_928_15);
-            ("fibonacci-triangle-15", fibonacci_triangle_15);
-            ("fibonacci-numbers", fibonacci_numbers);
-            ("padovan-numbers-20", padovan_numbers_20);
-            ("pascals-triangle-20", pascals_triangle_20);
-            ("a034298", a034298);
-            ("partition-numbers", partition_numbers);
-            ("pascals-triangle-30", pascals_triangle_30);
-            ("fibonacci-triangle-30", fibonacci_triangle_30);
-            ("divisors-of-928-30", divisors_of_928_30);
-            ("padovan-numbers-30", padovan_numbers_30);
-            ("divisors-of-928-60", divisors_of_928_60);
-            ("narayanas-cows", narayanas_cows);
-            ("a331072", a331072);
-            ("padovan-numbers-60", padovan_numbers_60);
-          ]);
-               ( "both",
-           get_group "Two clocks: minutes and seconds"
-             "Choose a sequence for the minutes clock."
-             (List.map sequence_data ~f:(fun x ->
-                  ( fst x,
-                  get_group "First clock: minutes"
-                  "Choose a sequence for the seconds clock." [
-                    ("semi-fibonacci", semi_fibonacci);
-                    ("tetranacci-numbers", tetranacci_numbers);
-                    ("tribonacci-numbers", tribonacci_numbers);
-                    ("padovan-numbers-15", padovan_numbers_15);
-                    ("pascals-triangle-15", pascals_triangle_15);
-                    ("divisors-of-928-15", divisors_of_928_15);
-                    ("fibonacci-triangle-15", fibonacci_triangle_15);
-                    ("fibonacci-numbers", fibonacci_numbers);
-                    ("padovan-numbers-20", padovan_numbers_20);
-                    ("pascals-triangle-20", pascals_triangle_20);
-                    ("a034298", a034298);
-                    ("partition-numbers", partition_numbers);
-                    ("pascals-triangle-30", pascals_triangle_30);
-                    ("fibonacci-triangle-30", fibonacci_triangle_30);
-                    ("divisors-of-928-30", divisors_of_928_30);
-                    ("padovan-numbers-30", padovan_numbers_30);
-                    ("divisors-of-928-60", divisors_of_928_60);
-                    ("narayanas-cows", narayanas_cows);
-                    ("a331072", a331072);
-                    ("padovan-numbers-60", padovan_numbers_60);
-                  ]
-                  ))) );
-                  ]) *)
-                  
-                  (* get_group "One clock: minutes or seconds" 
-                  subcommand_list *)
-                  
-                  (* "Choose an accuracy mode." *)
-                  (* ("lines", get_group "Over- and underlines" "aa" ["semi-fibonacci",semi_fibonacci]);
-                  ("bars", get_group "Partial bar characters" "bb" ["semi-fibonacci",semi_fibonacci]); *)
-                  (* ("text", get_group "Text" "cc" subcommand_list);
-                  ("invert", get_group "Invert fg/bg colors" "cc" subcommand_list); *)
+    (Command.basic ~summary:"fib clock"
+       ~readme:(fun () -> "aosihaiu")
+       (let%map_open.Command num = person_param 
+       and acc = accuracy
+        (* and seq = seqs  *)
+      in
+        fun () ->
+          Stdlib.print_int num.age;
+          (* Stdlib.print_endline num.name; *)
+          List.iter num.name ~f:(fun y -> Stdlib.print_string (y ^ " "));
+          (* List.iter num ~f:(fun x -> List.iter x ~f:(fun y -> Stdlib.print_string (y ^ " "))); *)
+          (* Stdlib.print_endline num; *)
+          Stdlib.print_endline acc;
+          (* Stdlib.print_endline seq *)
+          ))
