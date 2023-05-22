@@ -63,14 +63,25 @@ let () =
           flag "-seq" (one_or_more_as_list sequences) ~doc:"string sequences"
         and gap =
           flag "-gap" (one_or_more_as_list int) ~doc:"int gap in pixels"
+and spaces =
+flag "-s"
+  (optional_with_default 2 int)
+  ~doc:"int Spaces between clocks when using two (default 2)"
+
+  and colors = anon (sequence ("colors" %: string))
+
         in
         fun () ->
           if List.count args ~f:(fun x -> String.(=) x "-seq") <> List.count args ~f:(fun x -> String.(=) x "-gap") then failwith "number of sequences and gaps entered must be equal" else
           List.iter args ~f:(fun y -> Stdlib.print_string (y ^ " "));
+          Stdlib.print_newline ();
+          Stdlib.print_int spaces;
           Stdlib.print_newline ();
           List.iter seq ~f:(fun y ->
               Stdlib.print_int (snd y);
               List.iter (fst y) ~f:(fun z -> Stdlib.print_int z));
           Stdlib.print_newline ();
           List.iter gap ~f:(fun y -> Stdlib.print_int y);
+          Stdlib.print_newline ();
+          List.iter colors ~f:(fun y -> Stdlib.print_string y);
           Stdlib.print_newline ()))
