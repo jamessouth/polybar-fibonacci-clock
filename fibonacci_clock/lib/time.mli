@@ -6,10 +6,13 @@ val hour : int
 val blocks : string list
 val repeat : string -> int -> string
 
+type accuracy_mode = Bars | Invert | Lines | Text
+
 type clock = {
   seq : int list;
   gap : int;
   acc : int;
+  acc_mode : accuracy_mode;
   colors : string list;
 }
 

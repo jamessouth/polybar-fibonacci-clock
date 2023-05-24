@@ -22,7 +22,14 @@ let blocks = [ "▂"; "▄"; "▆"; "█" ]
 
 let repeat s n = String.concat (List.init n ~f:(fun _ -> s))
 
-type clock = { seq : int list; gap : int; acc : int; colors : string list }
+type accuracy_mode = 
+| Bars
+| Invert
+| Lines
+| Text
+
+
+type clock = { seq : int list; gap : int; acc : int; acc_mode: accuracy_mode; colors : string list }
 
 type layout =
   | Seconds of clock
@@ -32,9 +39,8 @@ type layout =
 let main = function
   | Seconds c -> Stdlib.print_int c.acc
   | Minutes c ->
+
       let g = "%{O" ^ string_of_int c.gap ^ "}" in
-      (* Stdlib.print_int hour;
-         Stdlib.print_int min; *)
       Stdlib.print_string ("%{o#ff9900}%{+o}%{u#ff9900}%{+u}" ^
         String.concat ~sep:g
            (List.map
@@ -42,6 +48,7 @@ let main = function
               ~f:(fun (col, num) ->
                 "%{F" ^ List.nth_exn c.colors col ^ "}"
                 ^ repeat (List.nth_exn blocks (min / c.acc)) num)))
+
   | Both (a, b, c) ->
       Stdlib.print_int a.acc;
       Stdlib.print_int b;

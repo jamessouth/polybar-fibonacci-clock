@@ -29,6 +29,17 @@ let sequences =
          ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], 60));
        ])
 
+let accuracy_modes = 
+  Command.Arg_type.of_map ~accept_unique_prefixes:false ~case_sensitive:false
+    ~list_values_in_help:true
+    (String.Map.of_alist_exn
+       [
+         ("bars", Fibonacci_clock.Time.Bars);
+         ("invert", Invert);
+         ("lines", Lines);
+         ("text",Text);
+       ])
+
 let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
     (Command.basic ~summary:"fib clock"
@@ -52,35 +63,40 @@ let () =
           then failwith "number of sequences and gaps entered must be equal"
           else
             let seq, acc = fst seqs in
+            let seq1, acc1 = List.hd_exn (snd seqs) in
             let gap = fst gaps in
-            let first = { seq; gap; acc; colors } in
+            let gap1 = List.hd_exn (snd gaps) in
 
-            match
-              ( List.count args ~f:(fun x -> String.( = ) x "-seq"),
-                List.length colors )
-            with
-            | 1, 2 -> Seconds first |> main
-            | 1, 4 -> Minutes first |> main
-            | 2, 6 ->
-                let seq1, acc1 = List.hd_exn (snd seqs) in
-                let min_colors, sec_colors = List.split_n colors 4 in
+            if gap < 0 || gap1 < 0 then
+              failwith "gaps must be unsigned integers"
+            else
+              let first = { seq; gap; acc; colors } in
 
-                Both
-                  ( { first with colors = min_colors },
-                    spaces,
-                    {
-                      seq = seq1;
-                      gap = List.hd_exn (snd gaps);
-                      acc = acc1;
-                      colors = sec_colors;
-                    } )
-                |> main
-            | 1, _ ->
-                failwith
-                  "invalid input - enter 2 or 4 colors. Escape # or quote each \
-                   color."
-            | 2, _ ->
-                failwith
-                  "invalid input - enter 6 colors. Escape # or quote each \
-                   color."
-            | _ -> failwith "invalid input"))
+              match
+                ( List.count args ~f:(fun x -> String.( = ) x "-seq"),
+                  List.length colors )
+              with
+              | 1, 2 -> Seconds first |> main
+              | 1, 4 -> Minutes first |> main
+              | 2, 6 ->
+                  let min_colors, sec_colors = List.split_n colors 4 in
+
+                  Both
+                    ( { first with colors = min_colors },
+                      spaces,
+                      {
+                        seq = seq1;
+                        gap = gap1;
+                        acc = acc1;
+                        colors = sec_colors;
+                      } )
+                  |> main
+              | 1, _ ->
+                  failwith
+                    "invalid input - enter 2 or 4 colors. Escape # or quote \
+                     each color"
+              | 2, _ ->
+                  failwith
+                    "invalid input - enter 6 colors. Escape # or quote each \
+                     color"
+              | _ -> failwith "invalid input - enter one or two of each flag"))
