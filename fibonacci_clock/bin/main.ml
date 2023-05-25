@@ -62,23 +62,24 @@ let () =
     (Command.basic ~summary:"fib clock"
        ~readme:(fun () -> "enter one or two of each flag")
        (let%map_open.Command args = args
-        and seqs =
-          flag "-seq" (one_or_more_as_pair sequences) ~doc:"string sequences"
+        and gaps =
+          flag "-gap" (one_or_more_as_pair int)
+            ~doc:"int Gap in pixels between numbers"
         and modes =
           flag "-mode"
             (one_or_more_as_pair accuracy_modes)
-            ~doc:"string accuracy modes"
-        and gaps =
-          flag "-gap" (one_or_more_as_pair int) ~doc:"int gap in pixels"
-        and spaces =
-          flag "-spaces"
-            (optional_with_default 2 int)
-            ~doc:"int Spaces between clocks when using two (default 2)"
+            ~doc:"string Accuracy modes"
+        and seqs =
+          flag "-seq" (one_or_more_as_pair sequences) ~doc:"string Sequences"
         and profiles =
           flag "-profiles" (optional color_profiles)
             ~doc:
-              "string predefined color profiles for minute clocks; omit to \
-               enter custom colors"
+              "string Color palettes from the original Fibonacci clock. For \
+               minute clocks only; omit to enter custom colors"
+        and spaces =
+          flag "-spaces"
+            (optional_with_default 2 int)
+            ~doc:"int Spaces between clocks when using two (default: 2)"
         and colors = anon (sequence ("colors" %: string)) in
         fun () ->
           let open Fibonacci_clock.Time in
