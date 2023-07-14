@@ -60,11 +60,13 @@ let color_profiles =
 let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
     (Command.basic ~summary:"fib clock"
-       ~readme:(fun () -> "enter one or two of each flag")
+       ~readme:(fun () ->
+         "enter one (for minutes or seconds) or two (for minutes first, then \
+          seconds) of each flag")
        (let%map_open.Command args = args
         and gaps =
           flag "-gap" (one_or_more_as_pair int)
-            ~doc:"int Gap in pixels between numbers"
+            ~doc:"int Pixel gap between numbers in the given clock"
         and modes =
           flag "-mode"
             (one_or_more_as_pair accuracy_modes)
@@ -79,10 +81,11 @@ let () =
         and spaces =
           flag "-spaces"
             (optional_with_default 2 int)
-            ~doc:"int Spaces between clocks when using two (default: 2)"
+            ~doc:"int Space gap between clocks when using both (default: 2)"
         and colors = anon (sequence ("colors" %: string)) in
         fun () ->
           let open Fibonacci_clock.Time in
+          let gaps_error = "gaps must be integers >= 0" in
           let countargs s = List.count args ~f:(fun x -> String.( = ) x s) in
           let numseqs = countargs "-seq" and numgaps = countargs "-gap" in
           if numseqs <> numgaps || numgaps <> countargs "-mode" then
@@ -92,7 +95,7 @@ let () =
             let seq, acc = fst seqs
             and acc_mode = fst modes
             and gap = fst gaps in
-            if gap < 0 then failwith "gaps must be unsigned integers"
+            if gap < 0 then failwith gaps_error
             else
               let first = { seq; gap; acc; acc_mode; colors } in
               if numseqs = 1 then
@@ -109,7 +112,7 @@ let () =
                 let seq1, acc1 = List.hd_exn (snd seqs)
                 and acc_mode1 = List.hd_exn (snd modes)
                 and gap1 = List.hd_exn (snd gaps) in
-                if gap1 < 0 then failwith "gaps must be unsigned integers"
+                if gap1 < 0 then failwith gaps_error
                 else
                   match (profiles, List.length colors) with
                   | None, 6 ->
