@@ -5,28 +5,30 @@ let sequences =
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ("semi-fibonacci", ([ 1; 1; 2; 1; 3; 2; 5 ], 15));
-         ("tetranacci-numbers", ([ 1; 1; 1; 1; 4; 7 ], 15));
-         ("tribonacci-numbers", ([ 1; 1; 2; 4; 7 ], 15));
-         ("padovan-numbers-15", ([ 1; 1; 1; 1; 2; 2; 3; 4 ], 15));
-         ("pascals-triangle-15", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], 15));
-         ("divisors-of-928-15", ([ 1; 2; 4; 8 ], 15));
-         ("fibonacci-triangle-15", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], 15));
-         ("fibonacci-numbers", ([ 1; 1; 2; 3; 5; 8 ], 20));
-         ("padovan-numbers-20", ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], 20));
-         ("pascals-triangle-20", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], 20));
-         ("a034298", ([ 1; 2; 3; 4; 6; 6; 8 ], 30));
-         ("partition-numbers", ([ 1; 1; 2; 3; 5; 7; 11 ], 30));
+         ( "semi-fibonacci-15",
+           ([ 1; 1; 2; 1; 3; 2; 5 ], Fibonacci_clock.Time.Fifteen) );
+         ("tetranacci-numbers-15", ([ 1; 1; 1; 1; 4; 7 ], Fifteen));
+         ("tribonacci-numbers-15", ([ 1; 1; 2; 4; 7 ], Fifteen));
+         ("padovan-numbers-15", ([ 1; 1; 1; 1; 2; 2; 3; 4 ], Fifteen));
+         ("pascals-triangle-15", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], Fifteen));
+         ("divisors-of-928-15", ([ 1; 2; 4; 8 ], Fifteen));
+         ("fibonacci-triangle-15", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], Fifteen));
+         ("fibonacci-numbers-20", ([ 1; 1; 2; 3; 5; 8 ], Twenty));
+         ("padovan-numbers-20", ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], Twenty));
+         ( "pascals-triangle-20",
+           ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], Twenty) );
+         ("a034298-30", ([ 1; 2; 3; 4; 6; 6; 8 ], Thirty));
+         ("partition-numbers-30", ([ 1; 1; 2; 3; 5; 7; 11 ], Thirty));
          ( "pascals-triangle-30",
-           ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], 30) );
+           ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], Thirty) );
          ( "fibonacci-triangle-30",
-           ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], 30) );
-         ("divisors-of-928-30", ([ 1; 2; 4; 8; 16 ], 30));
-         ("padovan-numbers-30", ([ 1; 2; 2; 3; 4; 5; 7; 9 ], 30));
-         ("divisors-of-928-60", ([ 1; 2; 4; 8; 16; 29 ], 60));
-         ("narayanas-cows", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], 60));
-         ("a331072", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], 60));
-         ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], 60));
+           ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], Thirty) );
+         ("divisors-of-928-30", ([ 1; 2; 4; 8; 16 ], Thirty));
+         ("padovan-numbers-30", ([ 1; 2; 2; 3; 4; 5; 7; 9 ], Thirty));
+         ("divisors-of-928-60", ([ 1; 2; 4; 8; 16; 29 ], Sixty));
+         ("narayanas-cows-60", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], Sixty));
+         ("a331072-60", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], Sixty));
+         ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], Sixty));
        ])
 
 let accuracy_modes =
@@ -61,8 +63,12 @@ let () =
   Command_unix.run ~version:"1.0" ~build_info:"RWO"
     (Command.basic ~summary:"fib clock"
        ~readme:(fun () ->
-         "enter one (for minutes or seconds) or two (for minutes first, then \
-          seconds) of each flag")
+         "Enter one or two of each flag: one for minutes or seconds; two for \
+          both: minutes first, then seconds. The numbers at the end of each \
+          sequence name are the sum of the numbers in the sequence/the \
+          accuracy of that sequence. A lower number/accuracy will generally \
+          take up less space in your bar. The accuracy mode is the way these \
+          sequences can still display time down to the minute or second.")
        (let%map_open.Command args = args
         and gaps =
           flag "-gap" (one_or_more_as_pair int)
@@ -92,12 +98,12 @@ let () =
             failwith
               "number of sequences, modes, and gaps entered must be equal"
           else
-            let seq, acc = fst seqs
+            let seq, acc_lvl = fst seqs
             and acc_mode = fst modes
             and gap = fst gaps in
             if gap < 0 then failwith gaps_error
             else
-              let first = { seq; gap; acc; acc_mode; colors } in
+              let first = { seq; gap; acc_lvl; acc_mode; colors } in
               if numseqs = 1 then
                 match (profiles, List.length colors) with
                 | None, 2 -> Seconds first |> main
@@ -123,7 +129,7 @@ let () =
                           {
                             seq = seq1;
                             gap = gap1;
-                            acc = acc1;
+                            acc_lvl = acc1;
                             acc_mode = acc_mode1;
                             colors = sec_colors;
                           } )
@@ -140,7 +146,7 @@ let () =
                           {
                             seq = seq1;
                             gap = gap1;
-                            acc = acc1;
+                            acc_lvl = acc1;
                             acc_mode = acc_mode1;
                             colors;
                           } )
