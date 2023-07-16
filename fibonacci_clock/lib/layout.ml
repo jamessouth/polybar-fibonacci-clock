@@ -6,13 +6,13 @@ let pl f lst =
   let rec print_elements = function
     | [] -> ()
     | h :: t ->
-        (* Stdlib.print_string "(";
+        Stdlib.print_string "(";
         f (fst h);
         Stdlib.print_string ", ";
         f (snd h);
-        Stdlib.print_string "); "; *)
+        Stdlib.print_string "); ";
    
-        f h;
+        (* f h; *)
         print_elements t
   in
   Stdlib.print_string "[";
@@ -20,7 +20,7 @@ let pl f lst =
   Stdlib.print_string "]";
   Stdlib.print_newline ()
 
-let pint = pl Stdlib.print_string
+let pint = pl Stdlib.print_int
 
 let get_layout hour minute sequence =
   let get_rando_seq target color_value terms =
