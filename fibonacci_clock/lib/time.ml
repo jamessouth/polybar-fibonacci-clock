@@ -7,7 +7,7 @@ let to_hour hr =
   | true, false -> hr
   | _ -> hr - 12
 
-let to_min min acc = min - (acc * (min / acc))
+let to_min min acc pt = min - (acc * pt)
 
 let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
   Unix.localtime (Unix.time ())
@@ -47,20 +47,46 @@ type layout =
 
 let main = function
   | Seconds c -> Stdlib.print_int (acc_lvl_to_int c.acc_lvl)
-  | Minutes c ->
-      let g = "%{O" ^ string_of_int c.gap ^ "}" in
+  | Minutes {
+    seq ;
+    gap ;
+    acc_lvl ;
+    acc_mode ;
+    colors 
+  } ->
+let acc_level = acc_lvl_to_int acc_lvl in
+    let hour_part = (min / acc_level)
+  in
+
+      
       Stdlib.print_string
-        ("%{o#ff9900}%{+o}%{u#ff9900}%{+u}"
-        ^ String.concat ~sep:g
+        (
+          
+        "%{o#ff9900}%{+o}%{u#ff9900}%{+u}"
+
+        ^ String.concat ~sep:("%{O" ^ string_of_int gap ^ "}")
             (List.map
+
                (Layout.get_layout (to_hour hour)
-                  (to_min min (acc_lvl_to_int c.acc_lvl))
-                  c.seq)
+                  (to_min min acc_level hour_part)
+                  seq)
+
                ~f:(fun (col, num) ->
-                 "%{F" ^ List.nth_exn c.colors col ^ "}"
+                 "%{F" ^ List.nth_exn colors col ^ "}"
                  ^ repeat
-                     (List.nth_exn blocks (min / acc_lvl_to_int c.acc_lvl))
-                     num)))
+
+                 (
+                  match acc_mode with 
+                  | Bars -> List.nth_exn blocks hour_part
+                  | _ -> "█"
+                 )
+                     
+                     num))
+                     
+                     )
+
+
+
   | Both (a, b, c) ->
       Stdlib.print_int (acc_lvl_to_int a.acc_lvl);
       Stdlib.print_int b;
