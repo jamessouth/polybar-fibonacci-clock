@@ -1,5 +1,5 @@
 val to_hour : int -> int
-val to_min : int -> int -> int
+val to_min : int -> int -> int -> int
 val sec : int
 val min : int
 val hour : int

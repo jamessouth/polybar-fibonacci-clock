@@ -68,7 +68,7 @@ let () =
           sequence name are the sum of the numbers in the sequence/the \
           accuracy of that sequence. A lower number/accuracy will generally \
           take up less space in your bar. The accuracy mode is the way these \
-          sequences can still display time down to the minute or second.")
+          sequences can still display time down to the minute or second. A sequence with 60 accuracy does not need an accuracy mode.")
        (let%map_open.Command args = args
         and gaps =
           flag "-gap" (one_or_more_as_pair int)

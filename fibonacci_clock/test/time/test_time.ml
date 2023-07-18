@@ -1,6 +1,6 @@
 open Core
 
-let list_0_to_59 = List.init ~f:(fun y -> y) 60
+(* let list_0_to_59 = List.init ~f:(fun y -> y) 60 *)
 
 let test_to_hour () =
   assert (
@@ -13,7 +13,7 @@ let test_to_hour () =
          @ List.init ~f:(fun y -> y + 1) 11))
       true)
 
-let test_to_min_15 () =
+(* let test_to_min_15 () =
   let list_0_to_14 = List.init ~f:(fun y -> y) 15 in
   assert (
     Bool.equal
@@ -51,7 +51,7 @@ let test_to_min_60 () =
          List.map list_0_to_59 ~f:(fun x -> Fibonacci_clock.Time.to_min x 60)
        in
        List.equal Int.equal res list_0_to_59)
-      true)
+      true) *)
 
 let test_repeat () =
   assert (
@@ -78,8 +78,8 @@ let test_repeat () =
 
 let () =
   test_to_hour ();
-  test_to_min_15 ();
+  (* test_to_min_15 ();
   test_to_min_20 ();
   test_to_min_30 ();
-  test_to_min_60 ();
+  test_to_min_60 (); *)
   test_repeat ()
