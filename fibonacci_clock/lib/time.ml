@@ -58,18 +58,40 @@ let acc_level = acc_lvl_to_int acc_lvl in
     let hour_part = (min / acc_level)
   in
 
+  (* "%{o#ff9900}%{+o}%{u#ff9900}%{+u}" *)
       
       Stdlib.print_string
         (
           
-        "%{o#ff9900}%{+o}%{u#ff9900}%{+u}"
 
-        ^ String.concat ~sep:("%{O" ^ string_of_int gap ^ "}")
+         String.concat ~sep:("%{O" ^ string_of_int gap ^ "}")
             (List.map
 
-               (Layout.get_layout (to_hour hour)
-                  (to_min min acc_level hour_part)
+
+
+               (Layout.get_layout 
+               
+               (match acc_mode with
+               | Invert | Lines | Text -> {Layout.hour = (to_hour hour);
+
+               minute = acc_level*min/60;
+               
+               
+               adjustment = min mod (60/acc_level)
+               
+               }
+               |  Bars -> {Layout.hour = (to_hour hour);
+
+                minute = to_min min acc_level hour_part;
+                
+                
+                adjustment = 0
+                
+                })
+
                   seq)
+
+
 
                ~f:(fun (col, num) ->
                  "%{F" ^ List.nth_exn colors col ^ "}"

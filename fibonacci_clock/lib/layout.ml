@@ -1,6 +1,10 @@
 open Core
 
 type t = { color : int; value : int; index : int }
+type time = { hour : int; minute : int; adjustment : int }
+
+
+
 
 let pl f lst =
   let rec print_elements = function
@@ -22,7 +26,7 @@ let pl f lst =
 
 let pint = pl Stdlib.print_int
 
-let get_layout hour minute sequence =
+let get_layout time sequence =
   let get_rando_seq target color_value terms =
     if target = 0 then terms
     else
@@ -53,5 +57,5 @@ let get_layout hour minute sequence =
       inner target [] terms
   in
   List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
-  |> get_rando_seq hour 1 |> get_rando_seq minute 2
+  |> get_rando_seq time.hour 1 |> get_rando_seq time.minute 2
   |> List.map ~f:(fun x -> (x.color, x.value))
