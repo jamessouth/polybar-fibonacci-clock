@@ -1,7 +1,7 @@
 open Core
 
 type t = { color : int; value : int; index : int }
-type time = { hour : int; minute : int; adjustment : int }
+type time = { hour : int; minute : int; add_time : int }
 
 
 

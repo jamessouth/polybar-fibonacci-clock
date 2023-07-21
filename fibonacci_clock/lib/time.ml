@@ -77,7 +77,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                minute = acc_level*min/60;
                
                
-               adjustment = min mod (60/acc_level)
+               add_time = min mod (60/acc_level)
                
                }
                |  Bars -> {Layout.hour = (to_hour hour);
@@ -85,7 +85,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                 minute = to_min min acc_level hour_part;
                 
                 
-                adjustment = 0
+                add_time = 0
                 
                 })
 
