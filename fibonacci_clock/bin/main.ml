@@ -1,34 +1,43 @@
 open Core
 
+
+
+type sequence = Sequence of int list * Fibonacci_clock.Time.accuracy_level
+
+let sequence_to_tuple = function Sequence (ints, acc) -> (ints, acc)
+
+
 let sequences =
   Command.Arg_type.of_map ~accept_unique_prefixes:false ~case_sensitive:false
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ( "semi-fibonacci-15",
-           ([ 1; 1; 2; 1; 3; 2; 5 ], Fibonacci_clock.Time.Fifteen) );
-         ("tetranacci-numbers-15", ([ 1; 1; 1; 1; 4; 7 ], Fifteen));
-         ("tribonacci-numbers-15", ([ 1; 1; 2; 4; 7 ], Fifteen));
-         ("padovan-numbers-15", ([ 1; 1; 1; 1; 2; 2; 3; 4 ], Fifteen));
-         ("pascals-triangle-15", ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], Fifteen));
-         ("divisors-of-928-15", ([ 1; 2; 4; 8 ], Fifteen));
-         ("fibonacci-triangle-15", ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], Fifteen));
-         ("fibonacci-numbers-20", ([ 1; 1; 2; 3; 5; 8 ], Twenty));
-         ("padovan-numbers-20", ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], Twenty));
+         ( "semi-fibonacci-15", Sequence ([ 1; 1; 2; 1; 3; 2; 5 ], Fifteen) );
+         ("tetranacci-numbers-15", Sequence ([ 1; 1; 1; 1; 4; 7 ], Fifteen));
+         ("tribonacci-numbers-15", Sequence ([ 1; 1; 2; 4; 7 ], Fifteen));
+         ("padovan-numbers-15", Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4 ], Fifteen));
+         ("pascals-triangle-15", Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], Fifteen));
+         ("divisors-of-928-15", Sequence ([ 1; 2; 4; 8 ], Fifteen));
+         ("fibonacci-triangle-15", Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], Fifteen));
+
+         ("fibonacci-numbers-20", Sequence ([ 1; 1; 2; 3; 5; 8 ], Twenty));
+         ("padovan-numbers-20", Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], Twenty));
          ( "pascals-triangle-20",
-           ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], Twenty) );
-         ("a034298-30", ([ 1; 2; 3; 4; 6; 6; 8 ], Thirty));
-         ("partition-numbers-30", ([ 1; 1; 2; 3; 5; 7; 11 ], Thirty));
+           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], Twenty) );
+
+         ("a034298-30", Sequence ([ 1; 2; 3; 4; 6; 6; 8 ], Thirty));
+         ("partition-numbers-30", Sequence ([ 1; 1; 2; 3; 5; 7; 11 ], Thirty));
          ( "pascals-triangle-30",
-           ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], Thirty) );
+           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], Thirty) );
          ( "fibonacci-triangle-30",
-           ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], Thirty) );
-         ("divisors-of-928-30", ([ 1; 2; 4; 8; 16 ], Thirty));
-         ("padovan-numbers-30", ([ 1; 2; 2; 3; 4; 5; 7; 9 ], Thirty));
-         ("divisors-of-928-60", ([ 1; 2; 4; 8; 16; 29 ], Sixty));
-         ("narayanas-cows-60", ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], Sixty));
-         ("a331072-60", ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], Sixty));
-         ("padovan-numbers-60", ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], Sixty));
+           Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], Thirty) );
+         ("divisors-of-928-30", Sequence ([ 1; 2; 4; 8; 16 ], Thirty));
+         ("padovan-numbers-30", Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9 ], Thirty));
+         
+         ("divisors-of-928-60", Sequence ([ 1; 2; 4; 8; 16; 29 ], Sixty));
+         ("narayanas-cows-60", Sequence ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], Sixty));
+         ("a331072-60", Sequence ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], Sixty));
+         ("padovan-numbers-60", Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], Sixty));
        ])
 
 let accuracy_modes =
@@ -36,7 +45,7 @@ let accuracy_modes =
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ("bars", Fibonacci_clock.Time.Bars);
+         ("bars", Fibonacci_clock.Time.Bars [ "▂"; "▄"; "▆"; "█" ]);
          ("invert", Invert);
          ("lines", Lines);
          ("text", Text);
@@ -98,7 +107,7 @@ let () =
             failwith
               "number of sequences, modes, and gaps entered must be equal"
           else
-            let seq, acc_lvl = fst seqs
+            let seq, acc_lvl = sequence_to_tuple (fst seqs)
             and acc_mode = fst modes
             and gap = fst gaps in
             if gap < 0 then failwith gaps_error
@@ -115,7 +124,7 @@ let () =
                       "invalid input - enter 2 or 4 colors or choose a \
                        profile. Escape # or quote each color"
               else if numseqs = 2 then
-                let seq1, acc1 = List.hd_exn (snd seqs)
+                let seq1, acc1 = snd seqs |> List.hd_exn |> sequence_to_tuple
                 and acc_mode1 = List.hd_exn (snd modes)
                 and gap1 = List.hd_exn (snd gaps) in
                 if gap1 < 0 then failwith gaps_error

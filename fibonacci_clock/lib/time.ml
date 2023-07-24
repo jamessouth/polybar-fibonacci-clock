@@ -12,7 +12,7 @@ let to_min min acc pt = min - (acc * pt)
 let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
   Unix.localtime (Unix.time ())
 
-let blocks = [ "▂"; "▄"; "▆"; "█" ]
+
 
 (* +(4-(60/x)) *)
 
@@ -30,7 +30,7 @@ let acc_lvl_to_int = function
   | Thirty -> 30
   | Sixty -> 60
 
-type accuracy_mode = Bars | Invert | Lines | Text
+type accuracy_mode = By_char of string list | Invert | Lines | Text
 
 type clock = {
   seq : int list;
@@ -80,7 +80,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                add_time = min mod (60/acc_level)
                
                }
-               |  Bars -> {Layout.hour = (to_hour hour);
+               |  By_char _ -> {Layout.hour = (to_hour hour);
 
                 minute = to_min min acc_level hour_part;
                 
@@ -99,7 +99,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
 
                  (
                   match acc_mode with 
-                  | Bars -> List.nth_exn blocks hour_part
+                  | By_char chars -> List.nth_exn chars hour_part
                   | _ -> "█"
                  )
                      

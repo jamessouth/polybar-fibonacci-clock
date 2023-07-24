@@ -59,3 +59,9 @@ let get_layout time sequence =
   List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
   |> get_rando_seq time.hour 1 |> get_rando_seq time.minute 2
   |> List.map ~f:(fun x -> (x.color, x.value))
+
+
+
+let rec show_add_time at i l = if at = 0 then l else let z = (List.take l i) in let w = (List.fold z ~init:0 ~f:(fun acc x -> acc + x)) in if w > at then (List.tl_exn z) else if w = at then z else show_add_time at (i+1) l;;
+
+
