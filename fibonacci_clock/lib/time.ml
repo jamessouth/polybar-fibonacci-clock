@@ -30,7 +30,7 @@ let acc_lvl_to_int = function
   | Thirty -> 30
   | Sixty -> 60
 
-type accuracy_mode = By_char of string list | Invert | Lines | Text
+type accuracy_mode = By_char of string list | By_pb_format of string list | Text of string
 
 type clock = {
   seq : int list;
@@ -72,7 +72,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                (Layout.get_layout 
                
                (match acc_mode with
-               | Invert | Lines | Text -> {Layout.hour = (to_hour hour);
+               | By_pb_format _ | Text _ -> {Layout.hour = (to_hour hour);
 
                minute = acc_level*min/60;
                

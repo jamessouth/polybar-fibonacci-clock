@@ -45,10 +45,12 @@ let accuracy_modes =
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ("bars", Fibonacci_clock.Time.Bars [ "▂"; "▄"; "▆"; "█" ]);
-         ("invert", Invert);
-         ("lines", Lines);
-         ("text", Text);
+         ("bars", Fibonacci_clock.Time.By_char [ "▂"; "▄"; "▆"; "█" ]);
+         ("invert colors", By_pb_format ["%{R}";"";"%{R}"]);
+         ("overlines", By_pb_format ["%{+o}";"";"%{-o}"]);
+         ("underlines", By_pb_format ["%{+u}";"";"%{-u}"]);
+         ("both lines", By_pb_format ["%{+o}%{+u}";"";"%{-o}%{-u}"]);
+         ("text", Text "");
        ])
 
 let color_profiles =
