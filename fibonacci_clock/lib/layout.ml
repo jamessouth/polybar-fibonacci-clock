@@ -62,6 +62,11 @@ let get_layout time sequence =
 
 
 
-let rec show_add_time at i l = if at = 0 then l else let z = (List.take l i) in let w = (List.fold z ~init:0 ~f:(fun acc x -> acc + x)) in if w > at then (List.tl_exn z) else if w = at then z else show_add_time at (i+1) l;;
+let rec show_add_time add ind l = 
+  if add = 0 then List.map l ~f:(fun x -> (x.color, 0, x.value)) else 
+  if add = 1 then List.mapi l ~f:(fun i x -> if i = 0 then (x.color, 1, x.value) else (x.color, 0, x.value)) else 
+  let two = (List.nth_exn l 1) in if add = 2 && two.value = 2 then List.mapi l ~f:(fun i x -> if i = 1 then (x.color, 1, x.value) else (x.color, 0, x.value)) else 
+    
+    let els = (List.take l ind) in let sum = (List.fold els ~init:0 ~f:(fun acc x -> acc + x)) in if sum > add then ([List.hd_exn els]) @ (List.tl_exn els) else if sum = add then els else show_add_time add (ind+1) l;;
 
 

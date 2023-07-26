@@ -46,11 +46,11 @@ let accuracy_modes =
     (String.Map.of_alist_exn
        [
          ("bars", Fibonacci_clock.Time.By_char [ "▂"; "▄"; "▆"; "█" ]);
-         ("invert colors", By_pb_format ["%{R}";"";"%{R}"]);
-         ("overlines", By_pb_format ["%{+o}";"";"%{-o}"]);
-         ("underlines", By_pb_format ["%{+u}";"";"%{-u}"]);
-         ("both lines", By_pb_format ["%{+o}%{+u}";"";"%{-o}%{-u}"]);
-         ("text", Text "");
+         ("invert colors", By_pb_format ["";"%{R}";"%{R}"]);
+         ("overlines", By_pb_format ["";"%{+o}";"%{-o}"]);
+         ("underlines", By_pb_format ["";"%{+u}";"%{-u}"]);
+         ("both lines", By_pb_format ["";"%{+o}%{+u}";"%{-o}%{-u}"]);
+         ("text", Text);
        ])
 
 let color_profiles =
@@ -58,16 +58,16 @@ let color_profiles =
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ("rgb", [ "#FFFFFF"; "#FF0A0A"; "#0AFF0A"; "#0A0AFF" ]);
-         ("mondrian", [ "#FFFFFF"; "#FF0A0A"; "#F8DE00"; "#0A0AFF" ]);
-         ("basbrun", [ "#FFFFFF"; "#502800"; "#14C814"; "#FF640A" ]);
-         ("80's", [ "#FFFFFF"; "#F564C9"; "#72F736"; "#71EBDB" ]);
-         ("pastel", [ "#FFFFFF"; "#FF7B7B"; "#8FFF70"; "#7878FF" ]);
-         ("modern", [ "#FFFFFF"; "#D4312D"; "#91D231"; "#8D5FE0" ]);
-         ("cold", [ "#FFFFFF"; "#D13EC8"; "#45E8E0"; "#5046CA" ]);
-         ("warm", [ "#FFFFFF"; "#ED1414"; "#F6F336"; "#FF7E15" ]);
-         ("earth", [ "#FFFFFF"; "#462300"; "#467A0A"; "#C8B600" ]);
-         ("dark", [ "#FFFFFF"; "#D32222"; "#50974E"; "#101895" ]);
+         ("rgb", Fibonacci_clock.Time.Profile [ "#FFFFFF"; "#FF0A0A"; "#0AFF0A"; "#0A0AFF" ]);
+         ("mondrian", Profile [ "#FFFFFF"; "#FF0A0A"; "#F8DE00"; "#0A0AFF" ]);
+         ("basbrun", Profile [ "#FFFFFF"; "#502800"; "#14C814"; "#FF640A" ]);
+         ("80's", Profile [ "#FFFFFF"; "#F564C9"; "#72F736"; "#71EBDB" ]);
+         ("pastel", Profile [ "#FFFFFF"; "#FF7B7B"; "#8FFF70"; "#7878FF" ]);
+         ("modern", Profile [ "#FFFFFF"; "#D4312D"; "#91D231"; "#8D5FE0" ]);
+         ("cold", Profile [ "#FFFFFF"; "#D13EC8"; "#45E8E0"; "#5046CA" ]);
+         ("warm", Profile [ "#FFFFFF"; "#ED1414"; "#F6F336"; "#FF7E15" ]);
+         ("earth", Profile [ "#FFFFFF"; "#462300"; "#467A0A"; "#C8B600" ]);
+         ("dark", Profile [ "#FFFFFF"; "#D32222"; "#50974E"; "#101895" ]);
        ])
 
 let () =
@@ -120,7 +120,7 @@ let () =
                 | None, 2 -> Seconds first |> main
                 | None, 4 -> Minutes first |> main
                 | Some profile, _ ->
-                    Minutes { first with colors = profile } |> main
+                    Minutes { first with colors = profile_to_list profile } |> main
                 | None, _ ->
                     failwith
                       "invalid input - enter 2 or 4 colors or choose a \
@@ -152,7 +152,7 @@ let () =
                          seconds clock. Escape # or quote each color"
                   | Some profile, 2 ->
                       Both
-                        ( { first with colors = profile },
+                        ( { first with colors = profile_to_list profile },
                           spaces,
                           {
                             seq = seq1;

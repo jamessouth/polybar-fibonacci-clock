@@ -30,7 +30,12 @@ let acc_lvl_to_int = function
   | Thirty -> 30
   | Sixty -> 60
 
-type accuracy_mode = By_char of string list | By_pb_format of string list | Text of string
+type accuracy_mode = By_char of string list | By_pb_format of string list | Text
+
+type profile = Profile of string list
+
+let profile_to_list = function Profile l -> l
+
 
 type clock = {
   seq : int list;
@@ -72,7 +77,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                (Layout.get_layout 
                
                (match acc_mode with
-               | By_pb_format _ | Text _ -> {Layout.hour = (to_hour hour);
+               | By_pb_format _ | Text -> {Layout.hour = (to_hour hour);
 
                minute = acc_level*min/60;
                
@@ -93,7 +98,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
 
 
 
-               ~f:(fun (col, num) ->
+               ~f:(fun (col, add, num) ->
                  "%{F" ^ List.nth_exn colors col ^ "}"
                  ^ repeat
 

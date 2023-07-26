@@ -14,7 +14,11 @@ val acc_lvl_to_int : accuracy_level -> int
 type accuracy_mode =
   | By_char of string list
   | By_pb_format of string list
-  | Text of string
+  | Text
+
+type profile = Profile of string list
+
+val profile_to_list : profile -> string list
 
 type clock = {
   seq : int list;
