@@ -3,9 +3,6 @@ open Core
 type t = { color : int; value : int; index : int }
 type time = { hour : int; minute : int; add_time : int }
 
-
-
-
 let pl f lst =
   let rec print_elements = function
     | [] -> ()
@@ -15,7 +12,7 @@ let pl f lst =
         Stdlib.print_string ", ";
         f (snd h);
         Stdlib.print_string "); ";
-   
+
         (* f h; *)
         print_elements t
   in
@@ -57,16 +54,40 @@ let get_layout time sequence =
       inner target [] terms
   in
   List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
-  |> get_rando_seq time.hour 1 |> get_rando_seq time.minute 2
+  |> get_rando_seq time.hour 1
+  |> get_rando_seq time.minute 2
   |> List.map ~f:(fun x -> (x.color, x.value))
 
-
-
-let rec show_add_time add ind l = 
-  if add = 0 then List.map l ~f:(fun x -> (x.color, 0, x.value)) else 
-  if add = 1 then List.mapi l ~f:(fun i x -> if i = 0 then (x.color, 1, x.value) else (x.color, 0, x.value)) else 
-  let two = (List.nth_exn l 1) in if add = 2 && two.value = 2 then List.mapi l ~f:(fun i x -> if i = 1 then (x.color, 1, x.value) else (x.color, 0, x.value)) else 
-    
-    let els = (List.take l ind) in let sum = (List.fold els ~init:0 ~f:(fun acc x -> acc + x)) in if sum > add then ([List.hd_exn els]) @ (List.tl_exn els) else if sum = add then els else show_add_time add (ind+1) l;;
-
-
+let rec show_add_time seq l =
+  let eq x y = x = y in
+  let first_two = List.sub seq ~pos:0 ~len:2 in
+  let one_two_list = [ 1; 2 ] in
+  let ret_val t i = (t.color, i, t.value) in
+  let map_first_two =
+    List.mapi l ~f:(fun i x ->
+        if i = 0 then ret_val x (succ i)
+        else if i = 2 then ret_val x i
+        else ret_val x 0)
+  in
+  function
+  | 0 -> List.map l ~f:(fun x -> ret_val x 0)
+  | 1 ->
+      List.mapi l ~f:(fun i x ->
+          if i < 2 then ret_val x (succ i) else ret_val x 0)
+  | 2 ->
+      if List.equal eq first_two one_two_list then
+        List.mapi l ~f:(fun i x ->
+            if i = 1 || i = 2 then ret_val x i else ret_val x 0)
+      else map_first_two
+  | _ ->
+      if List.equal eq (List.sub seq ~pos:1 ~len:2) one_two_list then
+        List.mapi l ~f:(fun i x ->
+            if i = 1 then ret_val x i
+            else if i = 3 then ret_val x (pred i)
+            else ret_val x 0)
+      else if List.equal eq first_two one_two_list then map_first_two
+      else
+        List.mapi l ~f:(fun i x ->
+            if i = 0 then ret_val x (succ i)
+            else if i = 3 then ret_val x (pred i)
+            else ret_val x 0)
