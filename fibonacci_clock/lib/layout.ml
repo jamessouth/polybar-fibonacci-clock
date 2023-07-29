@@ -53,41 +53,44 @@ let get_layout time sequence =
       in
       inner target [] terms
   in
-  List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
-  |> get_rando_seq time.hour 1
-  |> get_rando_seq time.minute 2
-  |> List.map ~f:(fun x -> (x.color, x.value))
-
-let rec show_add_time seq l =
-  let eq x y = x = y in
-  let first_two = List.sub seq ~pos:0 ~len:2 in
-  let one_two_list = [ 1; 2 ] in
   let ret_val t i = (t.color, i, t.value) in
-  let map_first_two =
-    List.mapi l ~f:(fun i x ->
-        if i = 0 then ret_val x (succ i)
-        else if i = 2 then ret_val x i
-        else ret_val x 0)
+  let run =
+    List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
+    |> get_rando_seq time.hour 1
+    |> get_rando_seq time.minute 2
+    |> List.mapi
   in
-  function
-  | 0 -> List.map l ~f:(fun x -> ret_val x 0)
-  | 1 ->
-      List.mapi l ~f:(fun i x ->
-          if i < 2 then ret_val x (succ i) else ret_val x 0)
-  | 2 ->
-      if List.equal eq first_two one_two_list then
-        List.mapi l ~f:(fun i x ->
-            if i = 1 || i = 2 then ret_val x i else ret_val x 0)
-      else map_first_two
-  | _ ->
-      if List.equal eq (List.sub seq ~pos:1 ~len:2) one_two_list then
-        List.mapi l ~f:(fun i x ->
-            if i = 1 then ret_val x i
-            else if i = 3 then ret_val x (pred i)
-            else ret_val x 0)
-      else if List.equal eq first_two one_two_list then map_first_two
-      else
-        List.mapi l ~f:(fun i x ->
+  match time.add_time < 2 with
+  | true ->
+      run ~f:(fun i x ->
+          if time.add_time = 1 then
+            if i < 2 then ret_val x (succ i) else ret_val x 0
+          else ret_val x 0)
+  | false -> (
+      let eq x y = x = y in
+      let first_two = List.sub sequence ~pos:0 ~len:2 in
+      let one_two_list = [ 1; 2 ] in
+      let map_first_two =
+        run ~f:(fun i x ->
             if i = 0 then ret_val x (succ i)
-            else if i = 3 then ret_val x (pred i)
+            else if i = 2 then ret_val x i
             else ret_val x 0)
+      in
+      match time.add_time with
+      | 2 ->
+          if List.equal eq first_two one_two_list then
+            run ~f:(fun i x ->
+                if i = 1 || i = 2 then ret_val x i else ret_val x 0)
+          else map_first_two
+      | _ ->
+          if List.equal eq (List.sub sequence ~pos:1 ~len:2) one_two_list then
+            run ~f:(fun i x ->
+                if i = 1 then ret_val x i
+                else if i = 3 then ret_val x (pred i)
+                else ret_val x 0)
+          else if List.equal eq first_two one_two_list then map_first_two
+          else
+            run ~f:(fun i x ->
+                if i = 0 then ret_val x (succ i)
+                else if i = 3 then ret_val x (pred i)
+                else ret_val x 0))
