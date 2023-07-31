@@ -39,6 +39,7 @@ let profile_to_list = function Profile l -> l
 
 type clock = {
   seq : int list;
+  adds: (int * int list) option;
   gap : int;
   acc_lvl : accuracy_level;
   acc_mode : accuracy_mode;
@@ -54,6 +55,7 @@ let main = function
   | Seconds c -> Stdlib.print_int (acc_lvl_to_int c.acc_lvl)
   | Minutes {
     seq ;
+    adds;
     gap ;
     acc_lvl ;
     acc_mode ;
@@ -94,7 +96,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
                 
                 })
 
-                  seq)
+                  seq adds)
 
 
 
