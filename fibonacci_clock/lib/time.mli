@@ -16,12 +16,15 @@ type accuracy_mode =
   | By_pb_format of string list
   | Text
 
+val acc_mode_to_list : accuracy_mode -> string list
+
 type profile = Profile of string list
 
 val profile_to_list : profile -> string list
 
 type clock = {
   seq : int list;
+  adds : (int * int list) list option;
   gap : int;
   acc_lvl : accuracy_level;
   acc_mode : accuracy_mode;

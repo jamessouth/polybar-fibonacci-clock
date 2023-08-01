@@ -29,8 +29,13 @@ let acc_lvl_to_int = function
   | Twenty -> 20
   | Thirty -> 30
   | Sixty -> 60
+  
+  type accuracy_mode = By_char of string list | By_pb_format of string list | Text
 
-type accuracy_mode = By_char of string list | By_pb_format of string list | Text
+  let acc_mode_to_list = function
+    | By_char c -> c
+    | By_pb_format f -> f
+    | Text -> []
 
 type profile = Profile of string list
 
@@ -39,7 +44,7 @@ let profile_to_list = function Profile l -> l
 
 type clock = {
   seq : int list;
-  adds: (int * int list) option;
+  adds: (int * int list) list option;
   gap : int;
   acc_lvl : accuracy_level;
   acc_mode : accuracy_mode;
@@ -101,7 +106,7 @@ let acc_level = acc_lvl_to_int acc_lvl in
 
 
                ~f:(fun (col, add, num) ->
-                 "%{F" ^ List.nth_exn colors col ^ "}"
+                 "%{F" ^ List.nth_exn colors col ^ "}" ^ (List.nth_exn (acc_mode_to_list acc_mode) add)
                  ^ repeat
 
                  (

@@ -7,10 +7,13 @@ let pl f lst =
   let rec print_elements = function
     | [] -> ()
     | h :: t ->
+      let a,b,c =  h in
         Stdlib.print_string "(";
-        f (fst h);
+        f a;
         Stdlib.print_string ", ";
-        f (snd h);
+        f b;
+        Stdlib.print_string ", ";
+        f c;
         Stdlib.print_string "); ";
 
         (* f h; *)
@@ -61,20 +64,20 @@ let get_layout time sequence adds =
     in
     List.mapi sequence ~f:(fun index value -> { index; value; color = 0 })
     |> get_rando_seq time.hour 1 |> get_rando_seq time.minute 2
-    |> List.map2 
+    |> List.map2_exn
 
     (
       match adds with
-    | Some (a) -> a
-      (* match (List.Assoc.find a ~equal:(fun x y -> x = y) time.add_time) with 
+    | Some (a) -> 
+      (match (List.Assoc.find a ~equal:(fun x y -> x = y) time.add_time) with 
       | Some (b) -> b
-       | None -> show_add_time time.add_time sequence   *)
+       | None -> show_add_time time.add_time sequence)  
     | None -> show_add_time time.add_time sequence
     )
     
-    (List.init ~f:(fun y -> y) (List.length sequence)) 
+    (* (List.init ~f:(fun y -> y) (List.length sequence))  *)
     
-    ~f:(fun x y -> (x.color, x.value))
+    ~f:(fun x y -> (y.color, x, y.value))
 
 
 

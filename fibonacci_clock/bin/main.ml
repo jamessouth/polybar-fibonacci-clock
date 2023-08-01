@@ -149,14 +149,15 @@ let () =
                   | None, _ ->
                       failwith
                         "invalid input - enter 6 colors or choose a profile \
-                         for the minutes clock and enter 2 colors for the \
-                         seconds clock. Escape # or quote each color"
-                  | Some profile, 2 ->
-                      Both
-                        ( { first with colors = profile_to_list profile },
+                        for the minutes clock and enter 2 colors for the \
+                        seconds clock. Escape # or quote each color"
+                        | Some profile, 2 ->
+                          Both
+                          ( { first with colors = profile_to_list profile },
                           spaces,
                           {
                             seq = seq1;
+                            adds = adds1;
                             gap = gap1;
                             acc_lvl = acc1;
                             acc_mode = acc_mode1;
