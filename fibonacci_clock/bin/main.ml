@@ -1,43 +1,62 @@
 open Core
 
+type sequence =
+  | Sequence of
+      int list
+      * Fibonacci_clock.Time.accuracy_level
+      * (int * int list) list
 
-
-type sequence = Sequence of int list * Fibonacci_clock.Time.accuracy_level * ((int * int list) list option)
-
-let sequence_to_tuple = function Sequence (ints, acc, adds) -> (ints, acc, adds)
-
+let sequence_to_tuple = function
+  | Sequence (ints, acc, adds) -> (ints, acc, adds)
 
 let sequences =
   Command.Arg_type.of_map ~accept_unique_prefixes:false ~case_sensitive:false
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ( "semi-fibonacci-15", Sequence ([ 1; 1; 2; 1; 3; 2; 5 ], Fifteen, Some ([3,[0;1;0;2;0;0;0]])));
-         ("tetranacci-numbers-15", Sequence ([ 1; 1; 1; 1; 4; 7 ], Fifteen, None));
-         ("tribonacci-numbers-15", Sequence ([ 1; 1; 2; 4; 7 ], Fifteen, Some ([3,[0;1;0;2;0]])));
-         ("padovan-numbers-15", Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4 ], Fifteen, None));
-         ("pascals-triangle-15", Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], Fifteen, None));
-         ("divisors-of-928-15", Sequence ([ 1; 2; 4; 8 ], Fifteen, Some ([2,[0;1;2;0];3,[1;0;2;0]])));
-         ("fibonacci-triangle-15", Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], Fifteen, None));
-
-         ("fibonacci-numbers-20", Sequence ([ 1; 1; 2; 3; 5; 8 ], Twenty, None));
-         ("padovan-numbers-20", Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], Twenty, None));
+         ( "semi-fibonacci-15",
+           Sequence
+             ( [ 1; 1; 2; 1; 3; 2; 5 ],
+               Fifteen,
+                [ (3, [ 0; 1; 0; 2; 0; 0; 0 ]) ] ) );
+         ( "tetranacci-numbers-15",
+           Sequence ([ 1; 1; 1; 1; 4; 7 ], Fifteen, []) );
+         ( "tribonacci-numbers-15",
+           Sequence ([ 1; 1; 2; 4; 7 ], Fifteen,  [ (3, [ 0; 1; 0; 2; 0 ]) ])
+         );
+         ( "padovan-numbers-15",
+           Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4 ], Fifteen, []) );
+         ( "pascals-triangle-15",
+           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1 ], Fifteen, []) );
+         ( "divisors-of-928-15",
+           Sequence
+             ( [ 1; 2; 4; 8 ],
+               Fifteen,
+                [ (2, [ 0; 1; 2; 0 ]); (3, [ 1; 0; 2; 0 ]) ] ) );
+         ( "fibonacci-triangle-15",
+           Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2 ], Fifteen, []) );
+         ("fibonacci-numbers-20", Sequence ([ 1; 1; 2; 3; 5; 8 ], Twenty, []));
+         ( "padovan-numbers-20",
+           Sequence ([ 1; 1; 1; 1; 2; 2; 3; 4; 5 ], Twenty, []) );
          ( "pascals-triangle-20",
-           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], Twenty, None));
-
-         ("a034298-30", Sequence ([ 1; 2; 3; 4; 6; 6; 8 ], Thirty, None));
-         ("partition-numbers-30", Sequence ([ 1; 1; 2; 3; 5; 7; 11 ], Thirty, None));
+           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4 ], Twenty, []) );
+         ("a034298-30", Sequence ([ 1; 2; 3; 4; 6; 6; 8 ], Thirty, []));
+         ( "partition-numbers-30",
+           Sequence ([ 1; 1; 2; 3; 5; 7; 11 ], Thirty, []) );
          ( "pascals-triangle-30",
-           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], Thirty, None));
+           Sequence ([ 1; 1; 1; 1; 2; 1; 1; 3; 3; 1; 1; 4; 6; 4 ], Thirty, [])
+         );
          ( "fibonacci-triangle-30",
-           Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], Thirty, None));
-         ("divisors-of-928-30", Sequence ([ 1; 2; 4; 8; 16 ], Thirty, None));
-         ("padovan-numbers-30", Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9 ], Thirty, None));
-         
-         ("divisors-of-928-60", Sequence ([ 1; 2; 4; 8; 16; 29 ], Sixty, None));
-         ("narayanas-cows-60", Sequence ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], Sixty, None));
-         ("a331072-60", Sequence ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], Sixty, None));
-         ("padovan-numbers-60", Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], Sixty, None));
+           Sequence ([ 1; 1; 1; 2; 1; 2; 3; 2; 2; 3; 5; 3; 4 ], Thirty, []) );
+         ("divisors-of-928-30", Sequence ([ 1; 2; 4; 8; 16 ], Thirty, []));
+         ( "padovan-numbers-30",
+           Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9 ], Thirty, []) );
+         ("divisors-of-928-60", Sequence ([ 1; 2; 4; 8; 16; 29 ], Sixty, []));
+         ( "narayanas-cows-60",
+           Sequence ([ 1; 1; 1; 2; 3; 4; 6; 9; 13; 19 ], Sixty, []) );
+         ("a331072-60", Sequence ([ 1; 2; 3; 5; 6; 8; 9; 12; 14 ], Sixty, []));
+         ( "padovan-numbers-60",
+           Sequence ([ 1; 2; 2; 3; 4; 5; 7; 9; 12; 16 ], Sixty, []) );
        ])
 
 let accuracy_modes =
@@ -46,10 +65,10 @@ let accuracy_modes =
     (String.Map.of_alist_exn
        [
          ("bars", Fibonacci_clock.Time.By_char [ "▂"; "▄"; "▆"; "█" ]);
-         ("invert colors", By_pb_format ["";"%{R}";"%{R}"]);
-         ("overlines", By_pb_format ["";"%{+o}";"%{-o}"]);
-         ("underlines", By_pb_format ["";"%{+u}";"%{-u}"]);
-         ("both lines", By_pb_format ["";"%{+o}%{+u}";"%{-o}%{-u}"]);
+         ("invert colors", By_pb_format [ ""; "%{R}"; "%{R}" ]);
+         ("overlines", By_pb_format [ ""; "%{+o}"; "%{-o}" ]);
+         ("underlines", By_pb_format [ ""; "%{+u}"; "%{-u}" ]);
+         ("both lines", By_pb_format [ ""; "%{+o}%{+u}"; "%{-o}%{-u}" ]);
          ("text", Text);
        ])
 
@@ -58,7 +77,9 @@ let color_profiles =
     ~list_values_in_help:true
     (String.Map.of_alist_exn
        [
-         ("rgb", Fibonacci_clock.Time.Profile [ "#FFFFFF"; "#FF0A0A"; "#0AFF0A"; "#0A0AFF" ]);
+         ( "rgb",
+           Fibonacci_clock.Time.Profile
+             [ "#FFFFFF"; "#FF0A0A"; "#0AFF0A"; "#0A0AFF" ] );
          ("mondrian", Profile [ "#FFFFFF"; "#FF0A0A"; "#F8DE00"; "#0A0AFF" ]);
          ("basbrun", Profile [ "#FFFFFF"; "#502800"; "#14C814"; "#FF640A" ]);
          ("80's", Profile [ "#FFFFFF"; "#F564C9"; "#72F736"; "#71EBDB" ]);
@@ -79,7 +100,8 @@ let () =
           sequence name are the sum of the numbers in the sequence/the \
           accuracy of that sequence. A lower number/accuracy will generally \
           take up less space in your bar. The accuracy mode is the way these \
-          sequences can still display time down to the minute or second. A sequence with 60 accuracy does not need an accuracy mode.")
+          sequences can still display time down to the minute or second. A \
+          sequence with 60 accuracy does not need an accuracy mode.")
        (let%map_open.Command args = args
         and gaps =
           flag "-gap" (one_or_more_as_pair int)
@@ -114,19 +136,21 @@ let () =
             and gap = fst gaps in
             if gap < 0 then failwith gaps_error
             else
-              let first = { seq; adds;gap; acc_lvl; acc_mode; colors } in
+              let first = { seq; adds; gap; acc_lvl; acc_mode; colors } in
               if numseqs = 1 then
                 match (profiles, List.length colors) with
                 | None, 2 -> Seconds first |> main
                 | None, 4 -> Minutes first |> main
                 | Some profile, _ ->
-                    Minutes { first with colors = profile_to_list profile } |> main
+                    Minutes { first with colors = profile_to_list profile }
+                    |> main
                 | None, _ ->
                     failwith
                       "invalid input - enter 2 or 4 colors or choose a \
                        profile. Escape # or quote each color"
               else if numseqs = 2 then
-                let seq1, acc1, adds1 = snd seqs |> List.hd_exn |> sequence_to_tuple
+                let seq1, acc1, adds1 =
+                  snd seqs |> List.hd_exn |> sequence_to_tuple
                 and acc_mode1 = List.hd_exn (snd modes)
                 and gap1 = List.hd_exn (snd gaps) in
                 if gap1 < 0 then failwith gaps_error
@@ -149,11 +173,11 @@ let () =
                   | None, _ ->
                       failwith
                         "invalid input - enter 6 colors or choose a profile \
-                        for the minutes clock and enter 2 colors for the \
-                        seconds clock. Escape # or quote each color"
-                        | Some profile, 2 ->
-                          Both
-                          ( { first with colors = profile_to_list profile },
+                         for the minutes clock and enter 2 colors for the \
+                         seconds clock. Escape # or quote each color"
+                  | Some profile, 2 ->
+                      Both
+                        ( { first with colors = profile_to_list profile },
                           spaces,
                           {
                             seq = seq1;

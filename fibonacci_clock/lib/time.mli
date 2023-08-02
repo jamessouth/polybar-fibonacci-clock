@@ -24,7 +24,7 @@ val profile_to_list : profile -> string list
 
 type clock = {
   seq : int list;
-  adds : (int * int list) list option;
+  adds : (int * int list) list;
   gap : int;
   acc_lvl : accuracy_level;
   acc_mode : accuracy_mode;

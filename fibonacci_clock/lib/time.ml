@@ -12,8 +12,6 @@ let to_min min acc pt = min - (acc * pt)
 let { Unix.tm_sec = sec; tm_min = min; tm_hour = hour; _ } =
   Unix.localtime (Unix.time ())
 
-
-
 (* +(4-(60/x)) *)
 
 (* let rec flatten_pairs = function
@@ -29,22 +27,24 @@ let acc_lvl_to_int = function
   | Twenty -> 20
   | Thirty -> 30
   | Sixty -> 60
-  
-  type accuracy_mode = By_char of string list | By_pb_format of string list | Text
 
-  let acc_mode_to_list = function
-    | By_char c -> c
-    | By_pb_format f -> f
-    | Text -> []
+type accuracy_mode =
+  | By_char of string list
+  | By_pb_format of string list
+  | Text
+
+let acc_mode_to_list = function
+  | By_char c -> c
+  | By_pb_format f -> f
+  | Text -> []
 
 type profile = Profile of string list
 
 let profile_to_list = function Profile l -> l
 
-
 type clock = {
   seq : int list;
-  adds: (int * int list) list option;
+  adds : (int * int list) list;
   gap : int;
   acc_lvl : accuracy_level;
   acc_mode : accuracy_mode;
@@ -58,69 +58,38 @@ type layout =
 
 let main = function
   | Seconds c -> Stdlib.print_int (acc_lvl_to_int c.acc_lvl)
-  | Minutes {
-    seq ;
-    adds;
-    gap ;
-    acc_lvl ;
-    acc_mode ;
-    colors 
-  } ->
-let acc_level = acc_lvl_to_int acc_lvl in
-    let hour_part = (min / acc_level)
-  in
+  | Minutes { seq; adds; gap; acc_lvl; acc_mode; colors } ->
+      let acc_level = acc_lvl_to_int acc_lvl in
+      let hour_part = min / acc_level in
 
-  (* "%{o#ff9900}%{+o}%{u#ff9900}%{+u}" *)
-      
+      (* "%{o#ff9900}%{+o}%{u#ff9900}%{+u}" *)
       Stdlib.print_string
-        (
-          
-
-         String.concat ~sep:("%{O" ^ string_of_int gap ^ "}")
-            (List.map
-
-
-
-               (Layout.get_layout 
-               
-               (match acc_mode with
-               | By_pb_format _ | Text -> {Layout.hour = (to_hour hour);
-
-               minute = acc_level*min/60;
-               
-               
-               add_time = min mod (60/acc_level)
-               
-               }
-               |  By_char _ -> {Layout.hour = (to_hour hour);
-
-                minute = to_min min acc_level hour_part;
-                
-                
-                add_time = 0
-                
-                })
-
-                  seq adds)
-
-
-
-               ~f:(fun (col, add, num) ->
-                 "%{F" ^ List.nth_exn colors col ^ "}" ^ (List.nth_exn (acc_mode_to_list acc_mode) add)
-                 ^ repeat
-
-                 (
-                  match acc_mode with 
-                  | By_char chars -> List.nth_exn chars hour_part
-                  | _ -> "█"
-                 )
-                     
-                     num))
-                     
-                     )
-
-
-
+        (String.concat
+           ~sep:("%{O" ^ string_of_int gap ^ "}")
+           (List.map
+              (Layout.get_layout
+                 (match acc_mode with
+                 | By_pb_format _ | Text ->
+                     {
+                       Layout.hour = to_hour hour;
+                       minute = acc_level * min / 60;
+                       add_time = min mod (60 / acc_level);
+                     }
+                 | By_char _ ->
+                     {
+                       Layout.hour = to_hour hour;
+                       minute = to_min min acc_level hour_part;
+                       add_time = 0;
+                     })
+                 seq adds)
+              ~f:(fun (col, add, num) ->
+                "%{F" ^ List.nth_exn colors col ^ "}"
+                ^ List.nth_exn (acc_mode_to_list acc_mode) add
+                ^ repeat
+                    (match acc_mode with
+                    | By_char chars -> List.nth_exn chars hour_part
+                    | _ -> "█")
+                    num)))
   | Both (a, b, c) ->
       Stdlib.print_int (acc_lvl_to_int a.acc_lvl);
       Stdlib.print_int b;

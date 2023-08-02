@@ -8,5 +8,5 @@ val show_add_time : int -> 'a list -> int list
 val get_layout :
   time ->
   int list ->
-  (int, int list) Base.List.Assoc.t option ->
+  (int, int list) Base.List.Assoc.t ->
   (int * int * int) list
