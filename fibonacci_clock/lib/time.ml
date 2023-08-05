@@ -61,6 +61,13 @@ let main = function
   | Minutes { seq; adds; gap; acc_lvl; acc_mode; colors } ->
       let acc_level = acc_lvl_to_int acc_lvl in
       let hour_part = min / acc_level in
+      let base_time =
+        {
+          Layout.hour = to_hour hour;
+          minute = acc_level * min / 60;
+          add_time = min mod (60 / acc_level);
+        }
+      in
 
       (* "%{o#ff9900}%{+o}%{u#ff9900}%{+u}" *)
       Stdlib.print_string
@@ -69,18 +76,14 @@ let main = function
            (List.map
               (Layout.get_layout
                  (match acc_mode with
-                 | By_pb_format _ | Text ->
-                     {
-                       Layout.hour = to_hour hour;
-                       minute = acc_level * min / 60;
-                       add_time = min mod (60 / acc_level);
-                     }
+                 | By_pb_format _ -> base_time
                  | By_char _ ->
                      {
-                       Layout.hour = to_hour hour;
+                       base_time with
                        minute = to_min min acc_level hour_part;
                        add_time = 0;
-                     })
+                     }
+                 | Text -> { base_time with add_time = 0 })
                  seq adds)
               ~f:(fun (col, add, num) ->
                 "%{F" ^ List.nth_exn colors col ^ "}"
@@ -89,7 +92,11 @@ let main = function
                     (match acc_mode with
                     | By_char chars -> List.nth_exn chars hour_part
                     | _ -> "█")
-                    num)))
+                    num))
+        ^
+        match acc_mode with
+        | Text -> " + " ^ string_of_int base_time.add_time
+        | _ -> "")
   | Both (a, b, c) ->
       Stdlib.print_int (acc_lvl_to_int a.acc_lvl);
       Stdlib.print_int b;

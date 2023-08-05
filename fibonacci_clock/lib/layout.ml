@@ -26,13 +26,14 @@ let pl f lst =
 
 let pint = pl Stdlib.print_int
 
-let show_add_time add l =
-  let zeros = List.init ~f:(fun _ -> 0) (List.length l - 1) in
-  match add < 1 with
-  | true -> 0 :: zeros
-  | false -> 1 :: List.mapi zeros ~f:(fun i x -> if i = add - 1 then 2 else x)
+let show_add_time len = function
+  | 1 -> 1 :: 2 :: List.init ~f:(fun _ -> 0) (len - 2)
+  | 2 -> 1 :: 0 :: 2 :: List.init ~f:(fun _ -> 0) (len - 3)
+  | 3 -> 1 :: 0 :: 0 :: 2 :: List.init ~f:(fun _ -> 0) (len - 4)
+  | _ -> List.init ~f:(fun _ -> 0) len
 
 let get_layout time sequence adds =
+  let seq_len = List.length sequence in
   let get_rando_seq target color_value terms =
     if target = 0 then terms
     else
@@ -40,9 +41,7 @@ let get_layout time sequence adds =
         match term_list with
         | [] -> failwith "target cannot be reached with these numbers"
         | _ ->
-            let random_index =
-              Random.State.int Random.State.default (List.length term_list)
-            in
+            let random_index = Random.State.int Random.State.default seq_len in
             let random_term = List.nth_exn term_list random_index in
             let result =
               { random_term with color = random_term.color + color_value }
@@ -68,5 +67,5 @@ let get_layout time sequence adds =
   |> List.map2_exn
        (match List.Assoc.find adds ~equal:(fun x y -> x = y) time.add_time with
        | Some b -> b
-       | None -> show_add_time time.add_time sequence)
+       | None -> show_add_time seq_len time.add_time)
        ~f:(fun x y -> (y.color, x, y.value))
